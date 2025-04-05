@@ -540,7 +540,7 @@ public class DonHangJFrame extends javax.swing.JFrame {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-        String maDH = txtMaDH.getText().trim();
+        String maDH = txtTimKiem.getText().trim();
 
         if (maDH.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã đơn hàng cần tìm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
