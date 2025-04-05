@@ -109,14 +109,14 @@ public class DonHangChiTietDAO {
         return null;
     }
     public List<String> MaSP(){
-        String sql="SELECT MaSP FROM SanPham";
+        String sql="SELECT TenSP FROM SanPham";
         List<String> dsMaSP=new ArrayList<>();
         try {
             Connection con=DataConnection.open();
             PreparedStatement preStm=con.prepareStatement(sql);
             ResultSet rs=preStm.executeQuery();
             while (rs.next()) {                
-                dsMaSP.add(rs.getString("MaSP"));
+                dsMaSP.add(rs.getString("TenSP"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,7 +140,7 @@ public class DonHangChiTietDAO {
     }
     public float getGiaBanBySP(String MaSP) {
         float Gia = 0;
-        String sql = "SELECT GiaBan from SanPham where MaSP=?";
+        String sql = "SELECT GiaBan from SanPham where TenSP=?";
         try {
             Connection con = DataConnection.open();
             PreparedStatement preStm = con.prepareStatement(sql);

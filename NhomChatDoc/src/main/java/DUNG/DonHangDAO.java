@@ -52,22 +52,21 @@ public class DonHangDAO {
     }
 
     public boolean update(DonHang dh) {
-        String sql = "update DonHang set MaNV=?, MaKH=?, NgayTaoDH=?, PhuongThucThanhToan=?, TongSoLuong=?, TongTien=? where MaDH=?";
-        try {
-            Connection conn = DataConnection.open();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, dh.getMaNV());
-            ps.setString(2, dh.getMaKH());
-            ps.setDate(3, (Date) dh.getNgayTao());
-            ps.setString(4, dh.getPhuongThucThanhToan());
-            ps.setInt(5, dh.getTongSoLuong());
-            ps.setBigDecimal(6, dh.getTongTien());
-            ps.setString(7, dh.getMaDH());
-
+        String sql = "UPDATE DonHang SET MaNV = ?, MaKH = ?, NgayTaoDH = ?, PhuongThucThanhToan = ?, TongSoLuong = ?, TongTien = ? WHERE MaDH = ?";
+        try (Connection conn = DataConnection.open(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, dh.getMaNV());
+            pstmt.setString(2, dh.getMaKH());
+            pstmt.setDate(3, (Date) dh.getNgayTao());
+            pstmt.setString(4, dh.getPhuongThucThanhToan());
+            pstmt.setInt(5, dh.getTongSoLuong());
+            pstmt.setBigDecimal(6, dh.getTongTien());
+            pstmt.setString(7, dh.getMaDH());
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public List<DonHang> findAll() {
@@ -132,15 +131,15 @@ public class DonHangDAO {
         }
         return false;
     }
-    
-    public List<String> getMaNV(){
-        String sql="select MaNV from NhanVien";
-        List<String> dsMaNV= new ArrayList<>();
+
+    public List<String> getMaNV() {
+        String sql = "select MaNV from NhanVien";
+        List<String> dsMaNV = new ArrayList<>();
         try {
             Connection conn = DataConnection.open();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs=ps.executeQuery();
-            while(rs.next()){
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
                 dsMaNV.add(rs.getString("MaNV"));
             }
         } catch (Exception e) {
@@ -148,15 +147,15 @@ public class DonHangDAO {
         }
         return dsMaNV;
     }
-    
-    public List<String> getMaKH(){
-        String sql="select MaKH from KhachHang";
-        List<String> dsMaKH= new ArrayList<>();
+
+    public List<String> getMaKH() {
+        String sql = "select MaKH from KhachHang";
+        List<String> dsMaKH = new ArrayList<>();
         try {
             Connection conn = DataConnection.open();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs= ps.executeQuery();
-            while(rs.next()){
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
                 dsMaKH.add(rs.getString("MaKH"));
             }
         } catch (Exception e) {
@@ -164,17 +163,17 @@ public class DonHangDAO {
         }
         return dsMaKH;
     }
-    
+
     //Tổng số lượng sản phẩm mua
-    public int tinhTongSoLuong(DonHang dh){
-        int tongSoLuong=0;
-        String sql="select sum(SoLuong) from DonHangChiTiet where MaDH=?";
+    public int tinhTongSoLuong(DonHang dh) {
+        int tongSoLuong = 0;
+        String sql = "select sum(SoLuong) from DonHangChiTiet where MaDH=?";
         try {
             Connection conn = DataConnection.open();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, dh.getMaDH());
-            ResultSet rs=ps.executeQuery();
-            if(rs.next()){
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
                 dh.setTongSoLuong(rs.getInt("TongSoLuong"));
             }
         } catch (Exception e) {
@@ -182,8 +181,6 @@ public class DonHangDAO {
         }
         return tongSoLuong;
     }
-    
-    //Tính tổng tiền
-    
 
+    //Tính tổng tiền
 }

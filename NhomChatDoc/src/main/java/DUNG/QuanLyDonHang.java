@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Admin
  */
 public class QuanLyDonHang extends javax.swing.JFrame {
+
     DefaultTableModel tableModel;
     DefaultTableModel tableModelCT;
 
@@ -38,8 +39,9 @@ public class QuanLyDonHang extends javax.swing.JFrame {
         loadMaDH();
         loadMaSP();
         addDocumentListeners();
-        
+
     }
+
     // Bảng Đơn hàng
     public void init() {
         tableModel = new DefaultTableModel();
@@ -52,13 +54,15 @@ public class QuanLyDonHang extends javax.swing.JFrame {
         DonHangDAO dao = new DonHangDAO();
         List<DonHang> list = dao.findAll();
         for (DonHang donHang : list) {
-            tableModel.addRow(new Object[]{donHang.getMaDH(),
+            tableModel.addRow(new Object[]{
+                donHang.getMaDH(),
                 donHang.getMaNV(),
                 donHang.getMaKH(),
                 donHang.getNgayTao(),
                 donHang.getPhuongThucThanhToan(),
                 donHang.getTongSoLuong(),
-                donHang.getTongTien()});
+                donHang.getTongTien()
+            });
         }
     }
 
@@ -79,20 +83,20 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             cboMaKH.addItem(maKH);
         }
     }
-    
+
     // Bảng Đơn hàng chi tiết
     public void initCT() {
-        tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(new String[]{"MaDonHangChiTiet", "MaDH", "MaSP", "So luong", "Don Gia", "Thanh Tien"});
-        tblbang.setModel(tableModel);
+        tableModelCT = new DefaultTableModel();
+        tableModelCT.setColumnIdentifiers(new String[]{"MaDonHangChiTiet", "MaDH", "MaSP", "So luong", "Don Gia", "Thanh Tien"});
+        tblbang.setModel(tableModelCT);
     }
 
     public void fillCT() {
-        tableModel.setNumRows(0);
+        tableModelCT.setNumRows(0);
         DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
         List<DonHangChiTiet> dhctlist = dhctdao.FindAll();
         for (DonHangChiTiet dhct : dhctlist) {
-            tableModel.addRow(new Object[]{dhct.getMaDonHangChiTiet(), dhct.getMaDH(), dhct.getMaSP(), dhct.getSoLuong(), dhct.getDonGia(), dhct.getThanhTien()});
+            tableModelCT.addRow(new Object[]{dhct.getMaDonHangChiTiet(), dhct.getMaDH(), dhct.getMaSP(), dhct.getSoLuong(), dhct.getDonGia(), dhct.getThanhTien()});
         }
     }
 
@@ -153,6 +157,39 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
         txtdongia.getDocument().addDocumentListener(documentListener);
         txtsoluong.getDocument().addDocumentListener(documentListener);
+    }
+
+    public void UpdateTongDonHang(String MaDH) {
+        DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
+        List<DonHangChiTiet> dhctlist = dhctdao.FindAll();
+        int tongsoluong = 0;
+        BigDecimal tongtien = BigDecimal.ZERO;
+        for (DonHangChiTiet dhct : dhctlist) {
+            if (dhct.getMaDH().equals(MaDH)) {
+                tongsoluong += dhct.getSoLuong();
+                tongtien = tongtien.add(dhct.getThanhTien());
+            }
+        }
+        DonHangDAO dhdao = new DonHangDAO();
+        DonHang dh = dhdao.findId(MaDH);
+        if (dh != null) {
+            dh.setTongSoLuong(tongsoluong);
+            dh.setTongTien(tongtien);
+            dhdao.update(dh);
+        } else {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy đơn hàng " + MaDH, "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        dh.setTongSoLuong(tongsoluong);
+        dh.setTongTien(tongtien);
+        dhdao.update(dh);
+        if (txtMaDH.getText().equals(MaDH)) {
+            txtSoLuong.setText(String.valueOf(tongsoluong));
+            txtTongTien.setText(String.valueOf(tongtien));
+        }
+
+        loadData();
+        fillCT();
     }
 
     /**
@@ -216,6 +253,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         btnthem = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -447,7 +485,9 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                                 .addComponent(jLabel5))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(rdoTienMat)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(rdoTienMat)
+                                    .addComponent(rdoQR))))
                         .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
@@ -455,9 +495,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(rdoQR)
-                            .addComponent(btnLamMoi))
+                        .addComponent(btnLamMoi)
                         .addGap(29, 29, 29)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -558,11 +596,23 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
         jLabel17.setText("MaSP");
 
+        jButton1.setText("TinhTong");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(275, 275, 275)
+                .addComponent(jLabel14)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -582,7 +632,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtthanhtien)
                             .addComponent(txtdongia)
-                            .addComponent(txttimkiem, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)))
+                            .addComponent(txttimkiem, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -591,17 +641,13 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(163, 163, 163)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
                     .addComponent(btnthem)
                     .addComponent(btnsua)
                     .addComponent(btnxoa)
                     .addComponent(btnclear)
                     .addComponent(btntimkiem))
                 .addGap(71, 71, 71))
-            .addComponent(jScrollPane2)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(275, 275, 275)
-                .addComponent(jLabel14)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -632,7 +678,9 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(txtdongia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(7, 7, 7)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
                     .addComponent(txtthanhtien, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -642,7 +690,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -709,23 +757,23 @@ public class QuanLyDonHang extends javax.swing.JFrame {
                 dh.getTongSoLuong(),
                 dh.getTongTien()});
 
-        //Hiển thị thông tin lên textField
-        txtMaDH.setText(dh.getMaDH());
-        cboMaNV.setSelectedItem(dh.getMaNV());
-        cboMaKH.setSelectedItem(dh.getMaKH());
-        txtNgayTao.setText(String.valueOf(dh.getNgayTao()));
-        if (dh.getPhuongThucThanhToan().equals("Tiền mặt")) {
-            rdoTienMat.setSelected(true);
+            //Hiển thị thông tin lên textField
+            txtMaDH.setText(dh.getMaDH());
+            cboMaNV.setSelectedItem(dh.getMaNV());
+            cboMaKH.setSelectedItem(dh.getMaKH());
+            txtNgayTao.setText(String.valueOf(dh.getNgayTao()));
+            if (dh.getPhuongThucThanhToan().equals("Tiền mặt")) {
+                rdoTienMat.setSelected(true);
+            } else {
+                rdoQR.setSelected(true);
+            }
+            txtSoLuong.setText(String.valueOf(dh.getTongSoLuong()));
+            txtTongTien.setText(String.valueOf(dh.getTongTien()));
         } else {
-            rdoQR.setSelected(true);
-        }
-        txtSoLuong.setText(String.valueOf(dh.getTongSoLuong()));
-        txtTongTien.setText(String.valueOf(dh.getTongTien()));
-        }else{
             JOptionPane.showMessageDialog(this, "Không tìm thấy mã đơn hàng");
             return;
         }
-        JOptionPane.showMessageDialog(this, "Tìm kiếm thành công","Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Tìm kiếm thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnTimKiemActionPerformed
 
     private void tblDonHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDonHangMouseClicked
@@ -761,13 +809,10 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã đơn hàng");
             return;
         }
-
-        //Kiểm tra trùng mã đơn hàng
         DonHangDAO dao = new DonHangDAO();
         if (dao.checkMaDH(txtMaDH.getText())) {
             JOptionPane.showMessageDialog(this, "Mã đơn hàng đã tồn tại!");
             return;
-
         }
         if (txtNgayTao.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày tạo đơn hàng");
@@ -777,13 +822,11 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán");
             return;
         }
-
         try {
             DonHang dh = new DonHang();
             dh.setMaDH(txtMaDH.getText());
             dh.setMaNV((String) cboMaNV.getSelectedItem());
             dh.setMaKH((String) cboMaKH.getSelectedItem());
-
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 sdf.setLenient(false);
@@ -798,14 +841,15 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             } else {
                 dh.setPhuongThucThanhToan("QR code");
             }
-            dh.setTongSoLuong(Integer.parseInt(txtSoLuong.getText()));
-            dh.setTongTien(new BigDecimal(txtTongTien.getText()));
+            dh.setTongSoLuong(0);
+            dh.setTongTien(BigDecimal.ZERO);
 
             int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn thêm đơn hàng không?", "Thông báo", JOptionPane.YES_NO_OPTION);
             if (chon == JOptionPane.YES_OPTION) {
                 if (dao.insert(dh)) {
                     JOptionPane.showMessageDialog(this, "Thêm đơn hàng thành công");
-                    loadData();
+                    loadData(); // Làm mới bảng tblDonHang
+                    UpdateTongDonHang(dh.getMaDH()); // Cập nhật tổng số lượng và tổng tiền
                 } else {
                     JOptionPane.showMessageDialog(this, "Thêm đơn hàng thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -847,7 +891,6 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             return;
         }
         DonHangDAO dao = new DonHangDAO();
-        //check sự mã đơn hàng tồn tại
         if (!dao.checkMaDH(txtMaDH.getText())) {
             JOptionPane.showMessageDialog(this, "Mã đơn hàng không tồn tại!");
             return;
@@ -860,7 +903,6 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn phương thức thanh toán");
             return;
         }
-
         try {
             DonHang dh = new DonHang();
             dh.setMaDH(txtMaDH.getText());
@@ -881,13 +923,14 @@ public class QuanLyDonHang extends javax.swing.JFrame {
             } else {
                 dh.setPhuongThucThanhToan("QR code");
             }
-            dh.setTongSoLuong(Integer.parseInt(txtSoLuong.getText()));
-            dh.setTongTien(new BigDecimal(txtTongTien.getText()));
-            int chon = JOptionPane.showConfirmDialog(this, "Bạn muốn cập nhật thông tin đơn hàng không ?", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            dh.setTongSoLuong(0);
+            dh.setTongTien(BigDecimal.ZERO);
+
+            int chon = JOptionPane.showConfirmDialog(this, "Bạn muốn cập nhật thông tin đơn hàng không ?", "Thông báo", JOptionPane.YES_NO_OPTION);
             if (chon == JOptionPane.YES_OPTION) {
                 if (dao.update(dh)) {
                     JOptionPane.showMessageDialog(this, "Cập nhật thông tin đơn hàng thành công");
-                    loadData();
+                    UpdateTongDonHang(dh.getMaDH()); // Cập nhật tổng số lượng và tổng tiền
                 } else {
                     JOptionPane.showMessageDialog(this, "Cập nhật thông tin đơn hàng thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -900,7 +943,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
     private void btnsuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsuaActionPerformed
         // TODO add your handling code here:
-        if (txtmadhct.getText().equals("")) {
+       if (txtmadhct.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Mời nhập mã đơn hàng chi tiết");
             return;
         }
@@ -941,11 +984,11 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
     private void btnxoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaActionPerformed
         // TODO add your handling code here:
-        if (txtmadhct.getText().equals("")) {
+         if (txtmadhct.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Mời nhập mã đơn hàng chi tiết");
             return;
-        }
-        try{
+        }        
+            try{
             DonHangChiTiet dhct=new DonHangChiTiet();
             dhct.setMaDonHangChiTiet(txtmadhct.getText());
             int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn xóa sản phẩm không");
@@ -1020,11 +1063,11 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
     private void tblbangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblbangMouseClicked
         // TODO add your handling code here:
-        int row=tblbang.getSelectedRow();
-        if (row>=0) {
-            String MaDHCT=(String) tblbang.getValueAt(row, 0);
-            DonHangChiTietDAO dhctdao=new DonHangChiTietDAO();
-            DonHangChiTiet dhct=dhctdao.FindById(MaDHCT);
+        int row = tblbang.getSelectedRow();
+        if (row >= 0) {
+            String MaDHCT = (String) tblbang.getValueAt(row, 0);
+            DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
+            DonHangChiTiet dhct = dhctdao.FindById(MaDHCT);
             txtmadhct.setText(dhct.getMaDonHangChiTiet());
             cboMaDH.setSelectedItem(dhct.getMaDH());
             cboMaSP.setSelectedItem(dhct.getMaSP());
@@ -1036,7 +1079,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
 
     private void btnthemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnthemActionPerformed
         // TODO add your handling code here:
-        if (txtmadhct.getText().equals("")) {
+       if (txtmadhct.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Mời nhập mã đơn hàng chi tiết");
             return;
         }
@@ -1078,6 +1121,17 @@ public class QuanLyDonHang extends javax.swing.JFrame {
     private void txtthanhtienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtthanhtienActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtthanhtienActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String maDH = (String) cboMaDH.getSelectedItem();
+        if (maDH == null || maDH.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn mã đơn hàng để tính tổng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        UpdateTongDonHang(maDH);
+        JOptionPane.showMessageDialog(this, "Tính tổng thành công cho đơn hàng " + maDH, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1129,6 +1183,7 @@ public class QuanLyDonHang extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cboMaKH;
     private javax.swing.JComboBox<String> cboMaNV;
     private javax.swing.JComboBox<String> cboMaSP;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
