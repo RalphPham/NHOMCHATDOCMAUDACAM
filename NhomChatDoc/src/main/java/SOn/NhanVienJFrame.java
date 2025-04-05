@@ -540,7 +540,7 @@ DefaultTableModel tableModel;
         txtngaysinh.setText(sdf.format(nv.getNgaySinh()));
         }else{
             JOptionPane.showMessageDialog(this, "Ko tìm thấy nhân viên theo mã");
-            fillTable();
+            return;
         }
         // Thông báo tìm kiếm thành công
         JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);

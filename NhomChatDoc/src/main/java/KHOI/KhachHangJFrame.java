@@ -236,6 +236,7 @@ public class KhachHangJFrame extends javax.swing.JFrame {
         }
         }else{
             JOptionPane.showMessageDialog(this, "Không tìm thấy mã khách hàng");
+            return;
         }
         // Thông báo tìm kiếm thành công
         JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
