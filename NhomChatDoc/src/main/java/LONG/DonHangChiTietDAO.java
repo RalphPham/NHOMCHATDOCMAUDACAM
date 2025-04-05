@@ -18,7 +18,7 @@ import java.util.List;
 public class DonHangChiTietDAO {
     public boolean insert(DonHangChiTiet dhct){
         String sql="INSERT INTO DonHangChiTiet values"
-                + "(?,?,?,?,?,?,?)";
+                + "(?,?,?,?,?,?)";
         try {
             Connection con=DataConnection.open();
             PreparedStatement preStm=con.prepareStatement(sql);
