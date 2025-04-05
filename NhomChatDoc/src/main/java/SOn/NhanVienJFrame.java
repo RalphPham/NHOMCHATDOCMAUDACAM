@@ -16,7 +16,9 @@ import javax.swing.table.DefaultTableModel;
  * @author famut
  */
 public class NhanVienJFrame extends javax.swing.JFrame {
-DefaultTableModel tableModel;
+
+    DefaultTableModel tableModel;
+
     /**
      * Creates new form NhanVienJFrame
      */
@@ -26,7 +28,8 @@ DefaultTableModel tableModel;
         fillTable();
         setLocationRelativeTo(null);
     }
-     public void initTable() {
+
+    public void initTable() {
         tableModel = new DefaultTableModel();
         String[] cols = new String[]{"Mã Nhân Viên", "Tên Nhân Viên", "Email", "Số Điện Thoại", "Giới Tính", "Địa Chỉ", "Ngày Sinh"};
         tableModel.setColumnIdentifiers(cols);
@@ -42,7 +45,7 @@ DefaultTableModel tableModel;
             tableModel.addRow(new Object[]{nv.getMaNV(), nv.getTenNV(), nv.getEmail(), nv.getSDT(), nv.getGioiTinh(), nv.getDiaChi(), nv.getNgaySinh()});
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -427,9 +430,9 @@ DefaultTableModel tableModel;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Bạn có chắc muốn xóa nhân viên với mã: " + MaNV + "?",
-            "Xác nhận",
-            JOptionPane.YES_NO_OPTION);
+                "Bạn có chắc muốn xóa nhân viên với mã: " + MaNV + "?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
             NhanVien nv = new NhanVien();
@@ -462,9 +465,9 @@ DefaultTableModel tableModel;
 
     private void tblnhanvienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblnhanvienMouseClicked
         // TODO add your handling code here:
-        try{
+        try {
             int row = tblnhanvien.getSelectedRow();
-            if(row >=0){
+            if (row >= 0) {
                 String MaNV = (String) tblnhanvien.getValueAt(row, 0);
                 NhanVienDAO nvdao = new NhanVienDAO();
                 NhanVien nv = nvdao.findByID(MaNV);
@@ -501,13 +504,12 @@ DefaultTableModel tableModel;
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên để tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             fillTable();
             return;
-            
+
         }
 
         NhanVienDAO nvdao = new NhanVienDAO();
-        NhanVien nv = nvdao.findByID(maNV);     
-      
-        
+        NhanVien nv = nvdao.findByID(maNV);
+
         if (nv != null) {
             tableModel.setRowCount(0);
             tableModel.addRow(new Object[]{
@@ -519,27 +521,27 @@ DefaultTableModel tableModel;
                 nv.getDiaChi(),
                 nv.getNgaySinh()
             });
-        // Hiển thị thông tin nhân viên
-        txtma.setText(nv.getMaNV());
-        txtten.setText(nv.getTenNV());
-        txtemail.setText(nv.getEmail());
-        txtsdt.setText(nv.getSDT());
+            // Hiển thị thông tin nhân viên
+            txtma.setText(nv.getMaNV());
+            txtten.setText(nv.getTenNV());
+            txtemail.setText(nv.getEmail());
+            txtsdt.setText(nv.getSDT());
 
-        // Xử lý radio button giới tính
-        if ("Nam".equals(nv.getGioiTinh())) {
-            rdonam.setSelected(true);
-        } else if ("Nữ".equals(nv.getGioiTinh())) {
-            rdonu.setSelected(true);
+            // Xử lý radio button giới tính
+            if ("Nam".equals(nv.getGioiTinh())) {
+                rdonam.setSelected(true);
+            } else if ("Nữ".equals(nv.getGioiTinh())) {
+                rdonu.setSelected(true);
+            } else {
+                rdonam.setSelected(false);
+                rdonu.setSelected(false);
+            }
+
+            txtdiachi.setText(nv.getDiaChi());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            txtngaysinh.setText(sdf.format(nv.getNgaySinh()));
         } else {
-            rdonam.setSelected(false);
-            rdonu.setSelected(false);
-        }
-
-        txtdiachi.setText(nv.getDiaChi());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        txtngaysinh.setText(sdf.format(nv.getNgaySinh()));
-        }else{
-            JOptionPane.showMessageDialog(this, "Ko tìm thấy nhân viên theo mã");
+            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên theo mã");
             return;
         }
         // Thông báo tìm kiếm thành công
