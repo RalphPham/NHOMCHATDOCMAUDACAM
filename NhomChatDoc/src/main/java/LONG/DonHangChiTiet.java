@@ -1,0 +1,78 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package LONG;
+
+import java.math.BigDecimal;
+
+/**
+ *
+ * @author famut
+ */
+public class DonHangChiTiet {
+    private String MaDonHangChiTiet,MaDH,MaSP;
+    private int SoLuong;
+    private BigDecimal DonGia,ThanhTien;
+
+    public DonHangChiTiet() {
+    }
+
+    public DonHangChiTiet(String MaDonHangChiTiet, String MaDH, String MaSP, int SoLuong, BigDecimal DonGia, BigDecimal ThanhTien) {
+        this.MaDonHangChiTiet = MaDonHangChiTiet;
+        this.MaDH = MaDH;
+        this.MaSP = MaSP;
+        this.SoLuong = SoLuong;
+        this.DonGia = DonGia;
+        this.ThanhTien = ThanhTien;
+    }
+
+    public String getMaDonHangChiTiet() {
+        return MaDonHangChiTiet;
+    }
+
+    public void setMaDonHangChiTiet(String MaDonHangChiTiet) {
+        this.MaDonHangChiTiet = MaDonHangChiTiet;
+    }
+
+    public String getMaDH() {
+        return MaDH;
+    }
+
+    public void setMaDH(String MaDH) {
+        this.MaDH = MaDH;
+    }
+
+    public String getMaSP() {
+        return MaSP;
+    }
+
+    public void setMaSP(String MaSP) {
+        this.MaSP = MaSP;
+    }
+
+    public int getSoLuong() {
+        return SoLuong;
+    }
+
+    public void setSoLuong(int SoLuong) {
+        this.SoLuong = SoLuong;
+    }
+
+    public BigDecimal getDonGia() {
+        return DonGia;
+    }
+
+    public void setDonGia(BigDecimal DonGia) {
+        this.DonGia = DonGia;
+    }
+
+    public BigDecimal getThanhTien() {
+        return ThanhTien;
+    }
+
+    public void setThanhTien(BigDecimal ThanhTien) {
+        this.ThanhTien = ThanhTien;
+    }
+    
+}
