@@ -7,8 +7,8 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
         <exec.mainClass>com.mycompany.nhomchatdoc.NhomChatDoc</exec.mainClass>
     </properties>
     <dependencies>
@@ -18,4 +18,11 @@
             <version>8.4.1.jre8 </version>
         </dependency>
     </dependencies>
+<!--    double giaNhap = Double.parseDouble(txtgianhap.getText().trim()); // Lấy Giá Nhập
+        int soLuong = Integer.parseInt(txtsoluong.getText().trim()); // Lấy Số Lượng Nhập
+
+        double tongChiPhi = giaNhap * soLuong; // Tính Tổng Chi Phí
+        txttong.setText(String.valueOf(tongChiPhi)); // Hiển thị lên ô Tổng Chi Phí
+    } catch (NumberFormatException e) {
+        txttong.setText(""); // Nếu nhập sai (VD: nhập chữ), xóa kết quả-->
 </project>
