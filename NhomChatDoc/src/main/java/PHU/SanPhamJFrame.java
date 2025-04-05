@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.nhomchatdoc;
+package PHU;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -22,6 +22,8 @@ public class SanPhamJFrame extends javax.swing.JFrame {
      */
     public SanPhamJFrame() {
         initComponents();
+        init();
+        fill();
     }
 public void init() {
         tbModel = new DefaultTableModel();
@@ -523,6 +525,7 @@ public void init() {
         // TODO add your handling code here:
         if (txttimkiem.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Điền mã sản phẩm cần tìm kiếm!");
+            fill();
             return;
         }
         int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn tìm sản phẩm?", "Thông báo", JOptionPane.YES_NO_OPTION);
@@ -559,6 +562,7 @@ public void init() {
         txtthoigian.setText("");
         txtmota.setText("");
         txttong.setText("");
+        txttimkiem.setText("");
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void txtgiabanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtgiabanActionPerformed

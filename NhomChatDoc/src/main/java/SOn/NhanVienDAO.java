@@ -4,7 +4,7 @@
  */
 package SOn;
 
-import com.mycompany.nhomchatdoc.DataConnection;
+import PHU.DataConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

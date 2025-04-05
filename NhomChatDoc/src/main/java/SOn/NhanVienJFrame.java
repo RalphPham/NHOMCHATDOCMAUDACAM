@@ -499,18 +499,26 @@ DefaultTableModel tableModel;
         // Kiểm tra nếu mã nhân viên để trống
         if (maNV.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên để tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            fillTable();
             return;
+            
         }
 
         NhanVienDAO nvdao = new NhanVienDAO();
-        NhanVien nv = nvdao.findByID(maNV);
-
-        // Kiểm tra nếu không tìm thấy nhân viên
-        if (nv == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên với mã: " + maNV, "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
+        NhanVien nv = nvdao.findByID(maNV);     
+      
+        
+        if (nv != null) {
+            tableModel.setRowCount(0);
+            tableModel.addRow(new Object[]{
+                nv.getMaNV(),
+                nv.getTenNV(),
+                nv.getEmail(),
+                nv.getSDT(),
+                nv.getGioiTinh(),
+                nv.getDiaChi(),
+                nv.getNgaySinh()
+            });
         // Hiển thị thông tin nhân viên
         txtma.setText(nv.getMaNV());
         txtten.setText(nv.getTenNV());
@@ -530,7 +538,10 @@ DefaultTableModel tableModel;
         txtdiachi.setText(nv.getDiaChi());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         txtngaysinh.setText(sdf.format(nv.getNgaySinh()));
-
+        }else{
+            JOptionPane.showMessageDialog(this, "Ko tìm thấy nhân viên theo mã");
+            fillTable();
+        }
         // Thông báo tìm kiếm thành công
         JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btntimActionPerformed

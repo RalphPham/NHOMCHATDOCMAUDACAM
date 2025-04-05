@@ -201,6 +201,7 @@ public class KhachHangJFrame extends javax.swing.JFrame {
         // Kiểm tra nếu mã nhân viên để trống
         if (maKH.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã khách hàng để tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            loaddatatotable();
             return;
         }
 
@@ -208,11 +209,16 @@ public class KhachHangJFrame extends javax.swing.JFrame {
         KhachHang kh = NVDAL.findByID(maKH);
 
         // Kiểm tra nếu không tìm thấy nhân viên
-        if (kh == null) {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng với mã: " + maKH, "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
+        
+        if (kh != null) {
+            tbModel.setRowCount(0);
+            tbModel.addRow(new Object[]{
+                kh.getMaKH(),
+                kh.getTenKH(),
+                kh.getSDT(),
+                kh.getGioiTinh(),
+                kh.getDiaChi()
+            });
         // Hiển thị thông tin nhân viên
         txtMaKH.setText(kh.getMaKH());
         txtTenKH.setText(kh.getTenKH());
@@ -228,7 +234,9 @@ public class KhachHangJFrame extends javax.swing.JFrame {
             rdoNam.setSelected(false);
             rdoNu.setSelected(false);
         }
-
+        }else{
+            JOptionPane.showMessageDialog(this, "Không tìm thấy mã khách hàng");
+        }
         // Thông báo tìm kiếm thành công
         JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }
