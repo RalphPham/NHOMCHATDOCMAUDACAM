@@ -11,20 +11,20 @@ import java.math.BigDecimal;
  * @author famut
  */
 public class DonHangChiTiet {
-    private String MaDonHangChiTiet,MaDH,MaSP;
+    private String MaDonHangChiTiet,MaDH,TenSP;
     private int SoLuong;
     private BigDecimal DonGia,ThanhTien;
 
-    public DonHangChiTiet() {
-    }
-
-    public DonHangChiTiet(String MaDonHangChiTiet, String MaDH, String MaSP, int SoLuong, BigDecimal DonGia, BigDecimal ThanhTien) {
+    public DonHangChiTiet(String MaDonHangChiTiet, String MaDH, String TenSP, int SoLuong, BigDecimal DonGia, BigDecimal ThanhTien) {
         this.MaDonHangChiTiet = MaDonHangChiTiet;
         this.MaDH = MaDH;
-        this.MaSP = MaSP;
+        this.TenSP = TenSP;
         this.SoLuong = SoLuong;
         this.DonGia = DonGia;
         this.ThanhTien = ThanhTien;
+    }
+
+    public DonHangChiTiet() {
     }
 
     public String getMaDonHangChiTiet() {
@@ -43,12 +43,12 @@ public class DonHangChiTiet {
         this.MaDH = MaDH;
     }
 
-    public String getMaSP() {
-        return MaSP;
+    public String getTenSP() {
+        return TenSP;
     }
 
-    public void setMaSP(String MaSP) {
-        this.MaSP = MaSP;
+    public void setTenSP(String TenSP) {
+        this.TenSP = TenSP;
     }
 
     public int getSoLuong() {
@@ -74,5 +74,6 @@ public class DonHangChiTiet {
     public void setThanhTien(BigDecimal ThanhTien) {
         this.ThanhTien = ThanhTien;
     }
+
     
 }

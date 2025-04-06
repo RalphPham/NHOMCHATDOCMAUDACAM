@@ -14,12 +14,12 @@ import java.sql.SQLException;
  */
 public class DataConnection {
     public static Connection open() throws ClassNotFoundException, SQLException{
-        Connection conn=null;
+        Connection con=null;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         String username = "sa";
-        String password = "piviola85712";
-        String url = "jdbc:sqlserver://localhost:1433;databaseName=QUANLYCHATDOCCC";
-        conn = DriverManager.getConnection(url, username, password);
-        return conn;
+        String password = "123";
+        String url = "jdbc:sqlserver://localhost:1433;databaseName=QUANLYCHATDOC";
+        con = DriverManager.getConnection(url, username, password);
+        return con;
     }
 }

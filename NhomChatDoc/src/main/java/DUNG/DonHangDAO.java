@@ -20,13 +20,13 @@ import java.util.List;
 public class DonHangDAO {
 
     public boolean insert(DonHang dh) {
-        String sql = "insert into DonHang (MaDH, MaNV, MaKH, NgayTaoDH, PhuongThucThanhToan, TongSoLuong, TongTien) values (?,?,?,?,?,?,?)";
+        String sql = "insert into DonHang (MaDH, TenNV, SDT, NgayTaoDH, PhuongThucThanhToan, TongSoLuong, TongTien) values (?,?,?,?,?,?,?)";
         try {
             Connection conn = DataConnection.open();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, dh.getMaDH());
-            ps.setString(2, dh.getMaNV());
-            ps.setString(3, dh.getMaKH());
+            ps.setString(2, dh.getTenNV());
+            ps.setString(3, dh.getSDT());
             ps.setDate(4, (Date) dh.getNgayTao());
             ps.setString(5, dh.getPhuongThucThanhToan());
             ps.setInt(6, dh.getTongSoLuong());
@@ -52,10 +52,10 @@ public class DonHangDAO {
     }
 
     public boolean update(DonHang dh) {
-        String sql = "UPDATE DonHang SET MaNV = ?, MaKH = ?, NgayTaoDH = ?, PhuongThucThanhToan = ?, TongSoLuong = ?, TongTien = ? WHERE MaDH = ?";
+        String sql = "UPDATE DonHang SET TenNV = ?, SDT = ?, NgayTaoDH = ?, PhuongThucThanhToan = ?, TongSoLuong = ?, TongTien = ? WHERE MaDH = ?";
         try (Connection conn = DataConnection.open(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, dh.getMaNV());
-            pstmt.setString(2, dh.getMaKH());
+            pstmt.setString(1, dh.getTenNV());
+            pstmt.setString(2, dh.getSDT());
             pstmt.setDate(3, (Date) dh.getNgayTao());
             pstmt.setString(4, dh.getPhuongThucThanhToan());
             pstmt.setInt(5, dh.getTongSoLuong());
@@ -79,8 +79,8 @@ public class DonHangDAO {
             while (rs.next()) {
                 DonHang dh = new DonHang();
                 dh.setMaDH(rs.getString("MaDH"));
-                dh.setMaNV(rs.getString("MaNV"));
-                dh.setMaKH(rs.getString("MaKH"));
+                dh.setTenNV(rs.getString("TenNV"));
+                dh.setSDT(rs.getString("SDT"));
                 dh.setNgayTao(rs.getDate("NgayTaoDH"));
                 dh.setPhuongThucThanhToan(rs.getString("PhuongThucThanhToan"));
                 dh.setTongSoLuong(rs.getInt("TongSoLuong"));
@@ -104,8 +104,8 @@ public class DonHangDAO {
             if (rs.next()) {
                 DonHang dh = new DonHang();
                 dh.setMaDH(rs.getString("MaDH"));
-                dh.setMaNV(rs.getString("MaNV"));
-                dh.setMaKH(rs.getString("MaKH"));
+                dh.setTenNV(rs.getString("TenNV"));
+                dh.setSDT(rs.getString("SDT"));
                 dh.setNgayTao(rs.getDate("NgayTaoDH"));
                 dh.setPhuongThucThanhToan(rs.getString("PhuongThucThanhToan"));
                 dh.setTongSoLuong(rs.getInt("TongSoLuong"));
@@ -133,14 +133,14 @@ public class DonHangDAO {
     }
 
     public List<String> getMaNV() {
-        String sql = "select MaNV from NhanVien";
+        String sql = "select TenNV from NhanVien";
         List<String> dsMaNV = new ArrayList<>();
         try {
             Connection conn = DataConnection.open();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                dsMaNV.add(rs.getString("MaNV"));
+                dsMaNV.add(rs.getString("TenNV"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,14 +149,14 @@ public class DonHangDAO {
     }
 
     public List<String> getMaKH() {
-        String sql = "select MaKH from KhachHang";
+        String sql = "select SDT from KhachHang";
         List<String> dsMaKH = new ArrayList<>();
         try {
             Connection conn = DataConnection.open();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                dsMaKH.add(rs.getString("MaKH"));
+                dsMaKH.add(rs.getString("SDT"));
             }
         } catch (Exception e) {
             e.printStackTrace();

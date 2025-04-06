@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Admin
  */
 public class DonHang {
-    private String maDH, maNV, maKH;
+    private String maDH, TenNV, SDT;
     private Date ngayTao;
     private String phuongThucThanhToan;
     private int tongSoLuong;
@@ -21,10 +21,10 @@ public class DonHang {
     public DonHang() {
     }
 
-    public DonHang(String maDH, String maNV, String maKH, Date ngayTao, String phuongThucThanhToan, int tongSoLuong, BigDecimal tongTien) {
+    public DonHang(String maDH, String TenNV, String SDT, Date ngayTao, String phuongThucThanhToan, int tongSoLuong, BigDecimal tongTien) {
         this.maDH = maDH;
-        this.maNV = maNV;
-        this.maKH = maKH;
+        this.TenNV = TenNV;
+        this.SDT = SDT;
         this.ngayTao = ngayTao;
         this.phuongThucThanhToan = phuongThucThanhToan;
         this.tongSoLuong = tongSoLuong;
@@ -39,20 +39,20 @@ public class DonHang {
         this.maDH = maDH;
     }
 
-    public String getMaNV() {
-        return maNV;
+    public String getTenNV() {
+        return TenNV;
     }
 
-    public void setMaNV(String maNV) {
-        this.maNV = maNV;
+    public void setTenNV(String TenNV) {
+        this.TenNV = TenNV;
     }
 
-    public String getMaKH() {
-        return maKH;
+    public String getSDT() {
+        return SDT;
     }
 
-    public void setMaKH(String maKH) {
-        this.maKH = maKH;
+    public void setSDT(String SDT) {
+        this.SDT = SDT;
     }
 
     public Date getNgayTao() {
@@ -86,6 +86,7 @@ public class DonHang {
     public void setTongTien(BigDecimal tongTien) {
         this.tongTien = tongTien;
     }
-    
+
+   
     
 }

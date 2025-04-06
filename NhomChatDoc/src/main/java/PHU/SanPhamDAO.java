@@ -17,7 +17,8 @@ import java.util.List;
  * @author famut
  */
 public class SanPhamDAO {
-     public boolean insert(SanPham sp) {
+
+    public boolean insert(SanPham sp) {
         String sql = "Insert into SanPham (MaSP,TenSP,Hang,GiaNhap,GiaBan,SoLuongNhap,ThoiGianNhapHang,TongChiPhiNhapHang,MoTa)"
                 + "values (?,?,?,?,?,?,?,?,?)";
         try {
@@ -156,21 +157,36 @@ public class SanPhamDAO {
         }
         return null;
     }
-    public BigDecimal TongChiPhiNhapHang(SanPham sp){
-        BigDecimal TongChiPhiNhapHang=BigDecimal.ZERO;
+
+    public BigDecimal TongChiPhiNhapHang(SanPham sp) {
+        BigDecimal TongChiPhiNhapHang = BigDecimal.ZERO;
         String sql = "Select(GiaNhap*SoLuongNhap) as TongChiPhiNhapHang from SanPham where MaSP=?";
-        try{
+        try {
             Connection con = DataConnection.open();
             PreparedStatement p = con.prepareStatement(sql);
-            p.setString(1,sp.getMasp());
+            p.setString(1, sp.getMasp());
             ResultSet rs = p.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 TongChiPhiNhapHang = rs.getBigDecimal("TongChiPhiNhapHang");
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return TongChiPhiNhapHang;
     }
 
+    public int getSoLuongByMaSP(String TenSP) {
+        String sql = "SELECT SoLuongNhap FROM SanPham WHERE TenSP = ?";
+        try (
+                Connection con = DataConnection.open(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, TenSP);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("SoLuongNhap");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
