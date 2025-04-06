@@ -189,4 +189,18 @@ public class SanPhamDAO {
         }
         return 0;
     }
+    
+    public boolean checkMaSP(String maSP) {
+        String sql = "SELECT COUNT(*) FROM SanPham WHERE MaSP = ?";
+        try (Connection conn = DataConnection.open(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, maSP);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu COUNT(*) > 0 tức là đã có mã SP này
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
