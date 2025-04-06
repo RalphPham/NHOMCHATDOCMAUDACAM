@@ -4,7 +4,10 @@
  */
 package THAI;
 
-import SOn.NhanVienJFrame;
+import DUNG.QuanLyDonHang;
+import KHOI.KhachHangJPanel;
+import PHU.SanPhamJPanel;
+import SOn.NhanVienJPanel;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,17 +15,16 @@ import javax.swing.JOptionPane;
  * @author admin
  */
 public class TrangChu extends javax.swing.JFrame {
-private NewJPanel test;
-private NhanVienJFrame nv;
-private NewJFrame n;
+private QuanLyDonHang qld;
+private KhachHangJPanel kh;
+private SanPhamJPanel sp;
+private NhanVienJPanel nv;
     /**
      * Creates new form TrangChu
      */
     public TrangChu() {
         initComponents();
-    }
-    public void nhanvien(){
-//        new NhanVienJFrame(this, true).setVisible(true);
+        setLocationRelativeTo(null);
     }
     
     /**
@@ -36,10 +38,10 @@ private NewJFrame n;
 
         jToolBar1 = new javax.swing.JToolBar();
         btnDangXuat = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnNhanVien = new javax.swing.JButton();
+        btnKhachHang = new javax.swing.JButton();
+        btnSanPham = new javax.swing.JButton();
+        btnDonHang = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         tabMain = new javax.swing.JTabbedPane();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -48,11 +50,11 @@ private NewJFrame n;
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuThoat = new javax.swing.JMenuItem();
         mnuQuanLy = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        mnuKhachHang = new javax.swing.JMenuItem();
-        mnuSanPham = new javax.swing.JMenuItem();
-        mnuDonHang = new javax.swing.JMenuItem();
-        mnuHoaDon = new javax.swing.JMenuItem();
+        mniNhanVien = new javax.swing.JMenuItem();
+        mniKhachHang = new javax.swing.JMenuItem();
+        mniSanPham = new javax.swing.JMenuItem();
+        mniDonHang = new javax.swing.JMenuItem();
+        mniHoaDon = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         mnuDoanhThu = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -66,40 +68,60 @@ private NewJFrame n;
         btnDangXuat.setFocusable(false);
         btnDangXuat.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnDangXuat.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(btnDangXuat);
-
-        jButton1.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\User.png")); // NOI18N
-        jButton1.setText("Nhân viên");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnDangXuat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnDangXuatActionPerformed(evt);
             }
         });
-        jToolBar1.add(jButton1);
+        jToolBar1.add(btnDangXuat);
 
-        jButton2.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\User group.png")); // NOI18N
-        jButton2.setText("Khách hàng");
-        jButton2.setFocusable(false);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton2);
+        btnNhanVien.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\User.png")); // NOI18N
+        btnNhanVien.setText("Nhân viên");
+        btnNhanVien.setFocusable(false);
+        btnNhanVien.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNhanVien.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNhanVien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNhanVienActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnNhanVien);
 
-        jButton3.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\laptop.png")); // NOI18N
-        jButton3.setText("Sản phẩm");
-        jButton3.setFocusable(false);
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton3);
+        btnKhachHang.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\User group.png")); // NOI18N
+        btnKhachHang.setText("Khách hàng");
+        btnKhachHang.setFocusable(false);
+        btnKhachHang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnKhachHang.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnKhachHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKhachHangActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnKhachHang);
 
-        jButton4.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Basket.png")); // NOI18N
-        jButton4.setText("Đơn hàng");
-        jButton4.setFocusable(false);
-        jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jToolBar1.add(jButton4);
+        btnSanPham.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\laptop.png")); // NOI18N
+        btnSanPham.setText("Sản phẩm");
+        btnSanPham.setFocusable(false);
+        btnSanPham.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSanPham.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSanPham.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSanPhamActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnSanPham);
+
+        btnDonHang.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Basket.png")); // NOI18N
+        btnDonHang.setText("Đơn hàng");
+        btnDonHang.setFocusable(false);
+        btnDonHang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDonHang.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDonHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDonHangActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnDonHang);
 
         jButton5.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Text.png")); // NOI18N
         jButton5.setText("Hóa đơn");
@@ -133,30 +155,45 @@ private NewJFrame n;
         mnuQuanLy.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Billboard.png")); // NOI18N
         mnuQuanLy.setText("Quản lý");
 
-        jMenuItem3.setText("Nhân viên");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        mniNhanVien.setText("Nhân viên");
+        mniNhanVien.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                mniNhanVienActionPerformed(evt);
             }
         });
-        mnuQuanLy.add(jMenuItem3);
+        mnuQuanLy.add(mniNhanVien);
 
-        mnuKhachHang.setText("Khách hàng");
-        mnuKhachHang.addActionListener(new java.awt.event.ActionListener() {
+        mniKhachHang.setText("Khách hàng");
+        mniKhachHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuKhachHangActionPerformed(evt);
+                mniKhachHangActionPerformed(evt);
             }
         });
-        mnuQuanLy.add(mnuKhachHang);
+        mnuQuanLy.add(mniKhachHang);
 
-        mnuSanPham.setText("Sản phẩm");
-        mnuQuanLy.add(mnuSanPham);
+        mniSanPham.setText("Sản phẩm");
+        mniSanPham.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniSanPhamActionPerformed(evt);
+            }
+        });
+        mnuQuanLy.add(mniSanPham);
 
-        mnuDonHang.setText("Đơn hàng");
-        mnuQuanLy.add(mnuDonHang);
+        mniDonHang.setText("Đơn hàng");
+        mniDonHang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniDonHangActionPerformed(evt);
+            }
+        });
+        mnuQuanLy.add(mniDonHang);
 
-        mnuHoaDon.setText("Hóa đơn");
-        mnuQuanLy.add(mnuHoaDon);
+        mniHoaDon.setText("Hóa đơn");
+        mniHoaDon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mniHoaDonActionPerformed(evt);
+            }
+        });
+        mnuQuanLy.add(mniHoaDon);
 
         jMenuBar1.add(mnuQuanLy);
 
@@ -178,7 +215,7 @@ private NewJFrame n;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 864, Short.MAX_VALUE)
             .addComponent(tabMain)
         );
         layout.setVerticalGroup(
@@ -186,15 +223,21 @@ private NewJFrame n;
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabMain, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE))
+                .addComponent(tabMain, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mnuKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuKhachHangActionPerformed
+    private void mniKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniKhachHangActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_mnuKhachHangActionPerformed
+        if(kh==null){
+            kh=new KhachHangJPanel();
+            tabMain.addTab("Quản lý khách hàng", kh);
+        }
+        tabMain.setSelectedComponent(kh);
+    }//GEN-LAST:event_mniKhachHangActionPerformed
 
     private void mnuDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDangXuatActionPerformed
         // TODO add your handling code here:
@@ -209,19 +252,78 @@ private NewJFrame n;
         }
     }//GEN-LAST:event_mnuThoatActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void mniNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniNhanVienActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        if(n==null){
-            n=new NewJFrame();
-            tabMain.addTab("Thông tin test", n);
+        if(nv==null){
+            nv=new NhanVienJPanel();
+            tabMain.addTab("Quản lý nhân viên", nv);
         }
-        tabMain.setSelectedComponent(n);
+        tabMain.setSelectedComponent(nv);
+    }//GEN-LAST:event_mniNhanVienActionPerformed
+
+    private void btnNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhanVienActionPerformed
+        // TODO add your handling code here: 
+        if(nv==null){
+            nv=new NhanVienJPanel();
+            tabMain.addTab("Quản lý nhân viên", nv);
+        }
+        tabMain.setSelectedComponent(nv);
+    }//GEN-LAST:event_btnNhanVienActionPerformed
+
+    private void btnDonHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDonHangActionPerformed
+        // TODO add your handling code here:
+        if(qld==null){
+            qld=new QuanLyDonHang();
+            tabMain.addTab("Quản lý đơn hàng", qld);
+        }
+        tabMain.setSelectedComponent(qld);
+    }//GEN-LAST:event_btnDonHangActionPerformed
+
+    private void btnKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhachHangActionPerformed
+        // TODO add your handling code here:
+        if(kh==null){
+            kh=new KhachHangJPanel();
+            tabMain.addTab("Quản lý khách hàng", kh);
+        }
+        tabMain.setSelectedComponent(kh);
+    }//GEN-LAST:event_btnKhachHangActionPerformed
+
+    private void btnSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSanPhamActionPerformed
+        // TODO add your handling code here:
+        if(sp==null){
+            sp=new SanPhamJPanel();
+            tabMain.addTab("Quản lý sản phẩm", sp);
+        }
+        tabMain.setSelectedComponent(sp);
+    }//GEN-LAST:event_btnSanPhamActionPerformed
+
+    private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
+        // TODO add your handling code here:
+        new DangNhap(this, true).setVisible(true);
+    }//GEN-LAST:event_btnDangXuatActionPerformed
+
+    private void mniSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSanPhamActionPerformed
+        // TODO add your handling code here:
+        if(sp==null){
+            sp=new SanPhamJPanel();
+            tabMain.addTab("Quản lý sản phẩm", sp);
+        }
+        tabMain.setSelectedComponent(sp);
+    }//GEN-LAST:event_mniSanPhamActionPerformed
+
+    private void mniDonHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniDonHangActionPerformed
+        // TODO add your handling code here:
+        if(qld==null){
+            qld=new QuanLyDonHang();
+            tabMain.addTab("Quản lý đơn hàng", qld);
+        }
+        tabMain.setSelectedComponent(qld);
+    }//GEN-LAST:event_mniDonHangActionPerformed
+
+    private void mniHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniHoaDonActionPerformed
+        // TODO add your handling code here:
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_mniHoaDonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -260,25 +362,25 @@ private NewJFrame n;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDangXuat;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnDonHang;
+    private javax.swing.JButton btnKhachHang;
+    private javax.swing.JButton btnNhanVien;
+    private javax.swing.JButton btnSanPham;
     private javax.swing.JButton jButton5;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JMenuItem mniDonHang;
+    private javax.swing.JMenuItem mniHoaDon;
+    private javax.swing.JMenuItem mniKhachHang;
+    private javax.swing.JMenuItem mniNhanVien;
+    private javax.swing.JMenuItem mniSanPham;
     private javax.swing.JMenuItem mnuDangXuat;
     private javax.swing.JMenuItem mnuDoanhThu;
-    private javax.swing.JMenuItem mnuDonHang;
     private javax.swing.JMenu mnuHeThong;
-    private javax.swing.JMenuItem mnuHoaDon;
-    private javax.swing.JMenuItem mnuKhachHang;
     private javax.swing.JMenu mnuQuanLy;
-    private javax.swing.JMenuItem mnuSanPham;
     private javax.swing.JMenuItem mnuThoat;
     private javax.swing.JTabbedPane tabMain;
     // End of variables declaration//GEN-END:variables
