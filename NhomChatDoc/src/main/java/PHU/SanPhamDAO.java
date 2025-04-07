@@ -178,7 +178,8 @@ public class SanPhamDAO {
     public int getSoLuongByMaSP(String TenSP) {
         String sql = "SELECT SoLuongNhap FROM SanPham WHERE TenSP = ?";
         try (
-                Connection con = DataConnection.open(); PreparedStatement ps = con.prepareStatement(sql)) {
+            Connection con = DataConnection.open();
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, TenSP);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -188,5 +189,18 @@ public class SanPhamDAO {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public boolean updateSoLuong(String maSP, int soLuongMoi) {
+        String sql = "UPDATE SanPham SET SoLuongNhap = ? WHERE TenSP = ?";
+        try (
+                Connection conn = DataConnection.open(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, soLuongMoi);
+            ps.setString(2, maSP);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

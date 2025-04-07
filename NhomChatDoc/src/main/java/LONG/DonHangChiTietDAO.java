@@ -163,5 +163,26 @@ public class DonHangChiTietDAO {
         }
         return Gia;
     }
-   
+   public List<DonHangChiTiet> findByMaDH(String maDH) {
+        List<DonHangChiTiet> list = new ArrayList<>();
+        String sql = "SELECT * FROM DonHangChiTiet WHERE MaDH = ?";
+        try (Connection conn = DataConnection.open();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, maDH);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                DonHangChiTiet dhct = new DonHangChiTiet();
+                dhct.setMaDonHangChiTiet(rs.getString("MaDonHangChiTiet"));
+                dhct.setMaDH(rs.getString("MaDH"));
+                dhct.setTenSP(rs.getString("TenSP"));
+                dhct.setSoLuong(rs.getInt("SoLuong"));
+                dhct.setDonGia(rs.getBigDecimal("DonGia"));
+                dhct.setThanhTien(rs.getBigDecimal("ThanhTien"));
+                list.add(dhct);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

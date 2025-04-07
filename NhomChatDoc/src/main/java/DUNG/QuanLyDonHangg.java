@@ -730,7 +730,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane4, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTabbedPane4)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1160,6 +1160,63 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+      String maDH = txtMaDH.getText().trim();
+    if (maDH.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Vui lòng nhập hoặc chọn mã đơn hàng để thanh toán!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    // Xác nhận thanh toán
+    int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thanh toán đơn hàng " + maDH + " không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+    if (confirm != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    try {
+        DonHangChiTietDAO dhctDao = new DonHangChiTietDAO();
+        SanPhamDAO spDao = new SanPhamDAO();
+        List<DonHangChiTiet> dhctList = dhctDao.findByMaDH(maDH); // Lấy danh sách sản phẩm trong đơn hàng chi tiết
+
+        if (dhctList == null || dhctList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Đơn hàng " + maDH + " chưa có sản phẩm nào!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Duyệt qua từng sản phẩm trong đơn hàng chi tiết
+        for (DonHangChiTiet dhct : dhctList) {
+            String maSP = dhct.getTenSP(); // Giả sử TenSP là mã sản phẩm (MaSP)
+            int soLuongMua = dhct.getSoLuong(); // Số lượng mua trong đơn hàng chi tiết
+
+            // Lấy số lượng tồn kho hiện tại từ bảng SanPham
+            int soLuongTonKho = spDao.getSoLuongByMaSP(maSP);
+            if (soLuongTonKho < soLuongMua) {
+                JOptionPane.showMessageDialog(this, "Sản phẩm " + maSP + " không đủ số lượng tồn kho! (Còn: " + soLuongTonKho + ")", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Tính số lượng mới sau khi trừ
+            int soLuongMoi = soLuongTonKho - soLuongMua;
+
+            // Cập nhật số lượng tồn kho trong bảng SanPham
+            if (spDao.updateSoLuong(maSP, soLuongMoi)) {
+                System.out.println("Đã cập nhật tồn kho cho " + maSP + ": " + soLuongMoi);
+            } else {
+                JOptionPane.showMessageDialog(this, "Cập nhật tồn kho cho sản phẩm " + maSP + " thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // Cập nhật tổng đơn hàng (nếu cần)
+        UpdateTongDonHang(maDH);
+
+        JOptionPane.showMessageDialog(this, "Thanh toán đơn hàng " + maDH + " thành công!\nSố lượng tồn kho đã được cập nhật.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        loadData(); // Làm mới bảng Đơn hàng
+        fillCT();   // Làm mới bảng Đơn hàng chi tiết
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Lỗi khi thanh toán: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

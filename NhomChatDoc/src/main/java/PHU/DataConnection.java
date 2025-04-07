@@ -17,7 +17,7 @@ public class DataConnection {
         Connection con=null;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         String username = "sa";
-        String password = "piviola85712";
+        String password = "123";
         String url = "jdbc:sqlserver://localhost:1433;databaseName=QUANLYCHATDOC";
         con = DriverManager.getConnection(url, username, password);
         return con;
