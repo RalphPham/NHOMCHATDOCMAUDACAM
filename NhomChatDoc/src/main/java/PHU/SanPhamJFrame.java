@@ -4,11 +4,9 @@
  */
 package PHU;
 
-import DUNG.QuanLyDonHangg;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -23,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 public class SanPhamJFrame extends javax.swing.JFrame {
 
     DefaultTableModel tbModel;
-    private List<QuanLyDonHangg.SanPhamObserver> observers = new ArrayList<>();
 
     /**
      * Creates new form SanPhamJFrame
