@@ -574,6 +574,11 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         jLabel13.setText("Tim kiem");
 
         cboMaDH.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboMaDH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboMaDHActionPerformed(evt);
+            }
+        });
 
         cboMaSP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboMaSP.addActionListener(new java.awt.event.ActionListener() {
@@ -838,7 +843,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         }
         DonHangDAO dao = new DonHangDAO();
         if (dao.checkMaDH(txtMaDH.getText())) {
-            JOptionPane.showMessageDialog(this, "Mã đơn hàng đã tồn tại!");
+            JOptionPane.showMessageDialog(this, "Mã đơn hàng đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (txtNgayTao.getText().equals("")) {
@@ -1218,6 +1223,10 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Lỗi khi thanh toán: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void cboMaDHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMaDHActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboMaDHActionPerformed
 
     /**
      * @param args the command line arguments

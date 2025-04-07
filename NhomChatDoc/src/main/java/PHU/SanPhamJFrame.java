@@ -407,6 +407,11 @@ public class SanPhamJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã");
             return;
         }
+        SanPhamDAO dao=new SanPhamDAO();
+        if(dao.checkMaSP(txtma.getText())){
+            JOptionPane.showMessageDialog(this, "Mã sản phẩm đã tồn tại!","Thông báo",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         if (txtten.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên");
             return;
@@ -433,7 +438,6 @@ public class SanPhamJFrame extends javax.swing.JFrame {
         }
 
         try {
-            SanPhamDAO dao = new SanPhamDAO();
             SanPham sp = new SanPham();
             sp.setMasp(txtma.getText());
             sp.setTensp(txtten.getText());
