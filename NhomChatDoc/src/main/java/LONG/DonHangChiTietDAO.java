@@ -185,4 +185,17 @@ public class DonHangChiTietDAO {
         }
         return list;
     }
+   public boolean checkMaDHCT(String maDHCT) {
+        String sql = "SELECT COUNT(*) FROM DonHangChiTiet WHERE MaDonHangChiTiet = ?";
+        try (Connection conn = DataConnection.open(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, maDHCT);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
