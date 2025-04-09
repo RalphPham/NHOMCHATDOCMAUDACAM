@@ -16,7 +16,7 @@ import java.sql.ResultSet;
 public class DangNhapDAO {
 
     public boolean User(String tk){
-        String sql = "Select * from DangNhap where TenDN=?";
+        String sql = "Select * from DangNhap where TaiKhoan=?";
         try {
             Connection conn = DataConnection.open();
             PreparedStatement p = conn.prepareStatement(sql);

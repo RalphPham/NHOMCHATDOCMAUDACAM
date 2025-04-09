@@ -119,18 +119,11 @@
                       </Group>
                       <EmptySpace pref="82" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jPanel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnLamMoi" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="110" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jButton2" min="-2" pref="102" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jPanel4" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnLamMoi" alignment="0" min="-2" pref="91" max="-2" attributes="0"/>
+                          <Component id="btnThanhToan" min="-2" pref="102" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -181,7 +174,7 @@
                                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtSoLuong" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="39" max="32767" attributes="0"/>
+                              <EmptySpace pref="30" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="txtTongTien" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -193,7 +186,7 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btnLamMoi" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnThanhToan" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -216,12 +209,12 @@
                 <Property name="text" type="java.lang.String" value="QU&#x1ea2;N L&#xdd; &#x110;&#x1a0;N H&#xc0;NG"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="btnThanhToan">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Thanh To&#xe1;n"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnThanhToanActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNgayTao">
