@@ -8,6 +8,7 @@ import DUNG.QuanLyDonHang;
 import KHOI.KhachHangJPanel;
 import PHU.SanPhamJPanel;
 import SOn.NhanVienJPanel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,18 +16,22 @@ import javax.swing.JOptionPane;
  * @author admin
  */
 public class TrangChu extends javax.swing.JFrame {
-private QuanLyDonHang qld;
-private KhachHangJPanel kh;
-private SanPhamJPanel sp;
-private NhanVienJPanel nv;
+
+    private QuanLyDonHang qld;
+    private KhachHangJPanel kh;
+    private SanPhamJPanel sp;
+    private NhanVienJPanel nv;
+    private String taikhoan;
+    
+    
     /**
      * Creates new form TrangChu
      */
-    public TrangChu() {
+    public TrangChu(String taikhoan) {
         initComponents();
         setLocationRelativeTo(null);
+        this.taikhoan = taikhoan;
     }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,6 +65,11 @@ private NhanVienJPanel nv;
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jToolBar1.setRollover(true);
 
@@ -232,8 +242,8 @@ private NhanVienJPanel nv;
 
     private void mniKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniKhachHangActionPerformed
         // TODO add your handling code here:
-        if(kh==null){
-            kh=new KhachHangJPanel();
+        if (kh == null) {
+            kh = new KhachHangJPanel();
             tabMain.addTab("Quản lý khách hàng", kh);
         }
         tabMain.setSelectedComponent(kh);
@@ -247,33 +257,43 @@ private NhanVienJPanel nv;
     private void mnuThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuThoatActionPerformed
         // TODO add your handling code here:
         int chonn = JOptionPane.showConfirmDialog(this, "Bạn có muốn thoát không");
-        if(chonn==JOptionPane.YES_OPTION){
+        if (chonn == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
     }//GEN-LAST:event_mnuThoatActionPerformed
 
     private void mniNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniNhanVienActionPerformed
         // TODO add your handling code here:
-        if(nv==null){
-            nv=new NhanVienJPanel();
-            tabMain.addTab("Quản lý nhân viên", nv);
+        if (!taikhoan.equals("Quản lý")) {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập");
+            return;
+        } else {
+            if (nv == null) {
+                nv = new NhanVienJPanel();
+                tabMain.addTab("Quản lý nhân viên", nv);
+            }
         }
         tabMain.setSelectedComponent(nv);
     }//GEN-LAST:event_mniNhanVienActionPerformed
 
     private void btnNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNhanVienActionPerformed
         // TODO add your handling code here: 
-        if(nv==null){
-            nv=new NhanVienJPanel();
-            tabMain.addTab("Quản lý nhân viên", nv);
+        if (!taikhoan.equals("Quản lý")) {
+            JOptionPane.showMessageDialog(this, "Bạn không có quyền truy cập");
+            return;
+        } else {
+            if (nv == null) {
+                nv = new NhanVienJPanel();
+                tabMain.addTab("Quản lý nhân viên", nv);
+            }
         }
         tabMain.setSelectedComponent(nv);
     }//GEN-LAST:event_btnNhanVienActionPerformed
 
     private void btnDonHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDonHangActionPerformed
         // TODO add your handling code here:
-        if(qld==null){
-            qld=new QuanLyDonHang();
+        if (qld == null) {
+            qld = new QuanLyDonHang();
             tabMain.addTab("Quản lý đơn hàng", qld);
         }
         tabMain.setSelectedComponent(qld);
@@ -281,8 +301,8 @@ private NhanVienJPanel nv;
 
     private void btnKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKhachHangActionPerformed
         // TODO add your handling code here:
-        if(kh==null){
-            kh=new KhachHangJPanel();
+        if (kh == null) {
+            kh = new KhachHangJPanel();
             tabMain.addTab("Quản lý khách hàng", kh);
         }
         tabMain.setSelectedComponent(kh);
@@ -290,8 +310,8 @@ private NhanVienJPanel nv;
 
     private void btnSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSanPhamActionPerformed
         // TODO add your handling code here:
-        if(sp==null){
-            sp=new SanPhamJPanel();
+        if (sp == null) {
+            sp = new SanPhamJPanel();
             tabMain.addTab("Quản lý sản phẩm", sp);
         }
         tabMain.setSelectedComponent(sp);
@@ -299,13 +319,14 @@ private NhanVienJPanel nv;
 
     private void btnDangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDangXuatActionPerformed
         // TODO add your handling code here:
+        this.dispose();
         new DangNhap(this, true).setVisible(true);
     }//GEN-LAST:event_btnDangXuatActionPerformed
 
     private void mniSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniSanPhamActionPerformed
         // TODO add your handling code here:
-        if(sp==null){
-            sp=new SanPhamJPanel();
+        if (sp == null) {
+            sp = new SanPhamJPanel();
             tabMain.addTab("Quản lý sản phẩm", sp);
         }
         tabMain.setSelectedComponent(sp);
@@ -313,8 +334,8 @@ private NhanVienJPanel nv;
 
     private void mniDonHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniDonHangActionPerformed
         // TODO add your handling code here:
-        if(qld==null){
-            qld=new QuanLyDonHang();
+        if (qld == null) {
+            qld = new QuanLyDonHang();
             tabMain.addTab("Quản lý đơn hàng", qld);
         }
         tabMain.setSelectedComponent(qld);
@@ -322,8 +343,12 @@ private NhanVienJPanel nv;
 
     private void mniHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniHoaDonActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_mniHoaDonActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -355,7 +380,7 @@ private NhanVienJPanel nv;
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TrangChu().setVisible(true);
+                new TrangChu("Quản lý").setVisible(true);
             }
         });
     }

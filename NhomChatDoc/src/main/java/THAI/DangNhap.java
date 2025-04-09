@@ -46,7 +46,7 @@ public class DangNhap extends javax.swing.JDialog {
         }
         if (user && pass) {
             JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
-            new TrangChu().setVisible(true);
+            new TrangChu(taikhoan).setVisible(true);
             this.dispose();
         }
     }
