@@ -6,7 +6,6 @@ package PHU;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.List;
  * @author famut
  */
 public class SanPhamDAO {
-
     public boolean insert(SanPham sp) {
         String sql = "Insert into SanPham (MaSP,TenSP,Hang,GiaNhap,GiaBan,SoLuongNhap,ThoiGianNhapHang,TongChiPhiNhapHang,MoTa)"
                 + "values (?,?,?,?,?,?,?,?,?)";
@@ -178,7 +176,8 @@ public class SanPhamDAO {
     public int getSoLuongByMaSP(String TenSP) {
         String sql = "SELECT SoLuongNhap FROM SanPham WHERE TenSP = ?";
         try (
-                Connection con = DataConnection.open(); PreparedStatement ps = con.prepareStatement(sql)) {
+            Connection con = DataConnection.open();
+            PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, TenSP);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -188,5 +187,31 @@ public class SanPhamDAO {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public boolean updateSoLuong(String maSP, int soLuongMoi) {
+        String sql = "UPDATE SanPham SET SoLuongNhap = ? WHERE TenSP = ?";
+        try (
+                Connection conn = DataConnection.open(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, soLuongMoi);
+            ps.setString(2, maSP);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean checkMaSP(String maSP) {
+        String sql = "SELECT COUNT(*) FROM SanPham WHERE MaSP = ?";
+        try (Connection conn = DataConnection.open(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, maSP);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu COUNT(*) > 0 tức là đã có mã SP này
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -112,4 +112,18 @@ public class KhachHangDAO {
         }
         return null;
     }
+    
+     public boolean checkMaKH(String maKH) {
+        String sql = "SELECT COUNT(*) FROM KhachHang WHERE MaKH = ?";
+        try (Connection conn = DataConnection.open(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, maKH);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu COUNT(*) > 0 tức là đã có mã KH này
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

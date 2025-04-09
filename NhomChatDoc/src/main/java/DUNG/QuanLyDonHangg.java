@@ -574,6 +574,11 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         jLabel13.setText("Tim kiem");
 
         cboMaDH.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboMaDH.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboMaDHActionPerformed(evt);
+            }
+        });
 
         cboMaSP.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboMaSP.addActionListener(new java.awt.event.ActionListener() {
@@ -730,7 +735,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane4, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTabbedPane4)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -758,6 +763,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         txtSoLuong.setText("0");
         txtTongTien.setText("0");
         txtTimKiem.setText("");
+        buttonGroup1.clearSelection();
     }//GEN-LAST:event_btnLamMoiActionPerformed
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
@@ -838,7 +844,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         }
         DonHangDAO dao = new DonHangDAO();
         if (dao.checkMaDH(txtMaDH.getText())) {
-            JOptionPane.showMessageDialog(this, "Mã đơn hàng đã tồn tại!");
+            JOptionPane.showMessageDialog(this, "Mã đơn hàng đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (txtNgayTao.getText().equals("")) {
@@ -894,19 +900,39 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã đơn hàng");
             return;
         }
+
+        DonHangDAO dao = new DonHangDAO();
+        DonHang dh = dao.findId(maDH);
+
+        if (dh == null) {
+            JOptionPane.showMessageDialog(this, "Mã đơn hàng không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        DonHangChiTietDAO dhctDao = new DonHangChiTietDAO();
+        List<DonHangChiTiet> dhctList = dhctDao.findByMaDH(maDH);
+        if (dhctList != null && !dhctList.isEmpty()) {
+            // Neu don hang da duoc cap nhat
+            SanPhamDAO spDao = new SanPhamDAO();
+            for (DonHangChiTiet dhct : dhctList) {
+                String maSP = dhct.getTenSP();
+                int soLuongMua = dhct.getSoLuong();
+                int soLuongTonKho = spDao.getSoLuongByMaSP(maSP);
+                // Sau khi ton kho bi tru =>Da thanh toan
+                if (soLuongTonKho >= 0 && soLuongMua > 0) {
+                    JOptionPane.showMessageDialog(this, "Mã đơn hàng đã thanh toán không thể xóa", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+        }
+
         int chon = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá " + maDH + " ? ", "Thông báo", JOptionPane.YES_NO_OPTION);
         if (chon == JOptionPane.YES_OPTION) {
-            DonHang dh = new DonHang();
-            dh.setMaDH(maDH);
-
-            DonHangDAO dao = new DonHangDAO();
-
             if (dao.delete(dh)) {
                 JOptionPane.showMessageDialog(this, "Xoá đơn hàng thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 loadData();
             } else {
-                JOptionPane.showMessageDialog(this, "Mã đơn hàng không tồn tại, xoá thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
+                JOptionPane.showMessageDialog(this, "Xoá đơn hàng thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnXoaActionPerformed
@@ -1113,6 +1139,12 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Mời nhập mã đơn hàng chi tiết");
             return;
         }
+        DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
+        if (dhctdao.checkMaDHCT(txtmadhct.getText())) {
+            JOptionPane.showMessageDialog(this, "Mã đơn hàng chi tiết đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         int soLuong = (Integer) scrsoluong.getValue();
         if (soLuong <= 0) {
             JOptionPane.showMessageDialog(this, "Số lượng phải là số lớn hơn 0");
@@ -1129,7 +1161,6 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             dhct.setThanhTien(new BigDecimal(TongThanhTien));
             int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn thêm sản phẩm không");
             if (chon == JOptionPane.YES_OPTION) {
-                DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
                 if (dhctdao.insert(dhct)) {
                     JOptionPane.showMessageDialog(this, "Thêm thành công");
                     fillCT();
@@ -1160,7 +1191,72 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        String maDH = txtMaDH.getText().trim();
+        if (maDH.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập hoặc chọn mã đơn hàng để thanh toán!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // kiem tra don hang da thanh toan
+        DonHangChiTietDAO dhctDao = new DonHangChiTietDAO();
+        SanPhamDAO spDao = new SanPhamDAO();
+        List<DonHangChiTiet> dhctList = dhctDao.findByMaDH(maDH);
+
+        if (dhctList != null && !dhctList.isEmpty()) {
+            for (DonHangChiTiet dhct : dhctList) {
+                String maSP = dhct.getTenSP();
+                int soLuongMua = dhct.getSoLuong();
+                int soLuongTonKho = spDao.getSoLuongByMaSP(maSP);
+                // neu ma ton kho da bi tru so voi ban dau thi coi nhu da thanh toan
+                if (soLuongTonKho >= 0 && soLuongMua > 0) {
+                    JOptionPane.showMessageDialog(this, "Đơn hàng " + maDH + " đã được thanh toán, không thể thanh toán lại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thanh toán đơn hàng " + maDH + " không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            if (dhctList == null || dhctList.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Đơn hàng " + maDH + " chưa có sản phẩm nào!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            // Thanh toan
+            for (DonHangChiTiet dhct : dhctList) {
+                String maSP = dhct.getTenSP();
+                int soLuongMua = dhct.getSoLuong();
+                int soLuongTonKho = spDao.getSoLuongByMaSP(maSP);
+                if (soLuongTonKho < soLuongMua) {
+                    JOptionPane.showMessageDialog(this, "Sản phẩm " + maSP + " không đủ số lượng tồn kho! (Còn: " + soLuongTonKho + ")", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                int soLuongMoi = soLuongTonKho - soLuongMua;
+                if (!spDao.updateSoLuong(maSP, soLuongMoi)) {
+                    JOptionPane.showMessageDialog(this, "Cập nhật tồn kho cho sản phẩm " + maSP + " thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            UpdateTongDonHang(maDH);
+
+            JOptionPane.showMessageDialog(this, "Thanh toán đơn hàng " + maDH + " thành công!\nSố lượng tồn kho đã được cập nhật.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            loadData();
+            fillCT();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi thanh toán: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void cboMaDHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMaDHActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboMaDHActionPerformed
 
     /**
      * @param args the command line arguments

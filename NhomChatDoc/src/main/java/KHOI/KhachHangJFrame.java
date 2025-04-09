@@ -50,6 +50,11 @@ public class KhachHangJFrame extends javax.swing.JFrame {
     }
 
     void Them() {
+        KhachHangDAO dao=new KhachHangDAO();
+        if(dao.checkMaKH(txtMaKH.getText())){
+            JOptionPane.showMessageDialog(this, "Mã khách hàng đã tồn tại!", "Thông báo",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         // MaKH, TenKH, SDT, GioiTinh, DiaChi
         String maKH = txtMaKH.getText().trim();
         String tenKH = txtTenKH.getText().trim();
