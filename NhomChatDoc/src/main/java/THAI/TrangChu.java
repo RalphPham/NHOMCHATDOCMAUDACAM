@@ -22,6 +22,7 @@ public class TrangChu extends javax.swing.JFrame {
     private SanPhamJPanel sp;
     private NhanVienJPanel nv;
     private String taikhoan;
+    private HoaDonJPanel hd;
     
     
     /**
@@ -73,7 +74,6 @@ public class TrangChu extends javax.swing.JFrame {
 
         jToolBar1.setRollover(true);
 
-        btnDangXuat.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Log out.png")); // NOI18N
         btnDangXuat.setText("Đăng xuất");
         btnDangXuat.setFocusable(false);
         btnDangXuat.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -85,7 +85,6 @@ public class TrangChu extends javax.swing.JFrame {
         });
         jToolBar1.add(btnDangXuat);
 
-        btnNhanVien.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\User.png")); // NOI18N
         btnNhanVien.setText("Nhân viên");
         btnNhanVien.setFocusable(false);
         btnNhanVien.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -97,7 +96,6 @@ public class TrangChu extends javax.swing.JFrame {
         });
         jToolBar1.add(btnNhanVien);
 
-        btnKhachHang.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\User group.png")); // NOI18N
         btnKhachHang.setText("Khách hàng");
         btnKhachHang.setFocusable(false);
         btnKhachHang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -109,7 +107,6 @@ public class TrangChu extends javax.swing.JFrame {
         });
         jToolBar1.add(btnKhachHang);
 
-        btnSanPham.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\laptop.png")); // NOI18N
         btnSanPham.setText("Sản phẩm");
         btnSanPham.setFocusable(false);
         btnSanPham.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -121,7 +118,6 @@ public class TrangChu extends javax.swing.JFrame {
         });
         jToolBar1.add(btnSanPham);
 
-        btnDonHang.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Basket.png")); // NOI18N
         btnDonHang.setText("Đơn hàng");
         btnDonHang.setFocusable(false);
         btnDonHang.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -133,14 +129,17 @@ public class TrangChu extends javax.swing.JFrame {
         });
         jToolBar1.add(btnDonHang);
 
-        jButton5.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Text.png")); // NOI18N
         jButton5.setText("Hóa đơn");
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         jToolBar1.add(jButton5);
 
-        mnuHeThong.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Microsoft.png")); // NOI18N
         mnuHeThong.setText("Hệ thống");
 
         mnuDangXuat.setText("Đăng xuất");
@@ -162,7 +161,6 @@ public class TrangChu extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuHeThong);
 
-        mnuQuanLy.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Billboard.png")); // NOI18N
         mnuQuanLy.setText("Quản lý");
 
         mniNhanVien.setText("Nhân viên");
@@ -207,7 +205,6 @@ public class TrangChu extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuQuanLy);
 
-        jMenu3.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Diagram.png")); // NOI18N
         jMenu3.setText("Thống kê");
 
         mnuDoanhThu.setText("Doanh thu");
@@ -215,7 +212,6 @@ public class TrangChu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
-        jMenu4.setIcon(new javax.swing.ImageIcon("E:\\ChatDocUniversity\\NHOMCHATDOCMAUDACAM\\NhomChatDoc\\src\\main\\resources\\img\\Info.png")); // NOI18N
         jMenu4.setText("Thông tin");
         jMenuBar1.add(jMenu4);
 
@@ -349,6 +345,15 @@ public class TrangChu extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         
     }//GEN-LAST:event_formWindowOpened
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        if (hd == null) {
+            hd = new HoaDonJPanel();
+            tabMain.addTab("Hóa đơn", hd);
+        }
+        tabMain.setSelectedComponent(hd);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

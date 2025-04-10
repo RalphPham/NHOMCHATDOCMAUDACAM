@@ -6,9 +6,6 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="mnuHeThong">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\Microsoft.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="H&#x1ec7; th&#x1ed1;ng"/>
           </Properties>
           <SubComponents>
@@ -34,9 +31,6 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="mnuQuanLy">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\Billboard.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xfd;"/>
           </Properties>
           <SubComponents>
@@ -84,9 +78,6 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu3">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\Diagram.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Th&#x1ed1;ng k&#xea;"/>
           </Properties>
           <SubComponents>
@@ -99,9 +90,6 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu4">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\Info.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Th&#xf4;ng tin"/>
           </Properties>
         </Menu>
@@ -159,9 +147,6 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnDangXuat">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\Log out.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="&#x110;&#x103;ng xu&#x1ea5;t"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -173,9 +158,6 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnNhanVien">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\User.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Nh&#xe2;n vi&#xea;n"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -187,9 +169,6 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnKhachHang">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\User group.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="Kh&#xe1;ch h&#xe0;ng"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -201,9 +180,6 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSanPham">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\laptop.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="S&#x1ea3;n ph&#x1ea9;m"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -215,9 +191,6 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDonHang">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\Basket.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="&#x110;&#x1a1;n h&#xe0;ng"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -229,14 +202,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="jButton5">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="E:\ChatDocUniversity\NHOMCHATDOCMAUDACAM\NhomChatDoc\src\main\resources\img\Text.png"/>
-            </Property>
             <Property name="text" type="java.lang.String" value="H&#xf3;a &#x111;&#x1a1;n"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

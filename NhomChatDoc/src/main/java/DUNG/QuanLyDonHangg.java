@@ -6,12 +6,18 @@ package DUNG;
 
 import LONG.DonHangChiTiet;
 import LONG.DonHangChiTietDAO;
+import PHU.DataConnection;
 import PHU.SanPhamDAO;
+import THAI.HoaDonJPanel;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
@@ -57,6 +63,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         tableModel.setRowCount(0);
         DonHangDAO dao = new DonHangDAO();
         List<DonHang> list = dao.findAll();
+        DecimalFormat df = new DecimalFormat("#,###");
         if (list == null || list.isEmpty()) {
             txtSoLuong.setText("0");
             txtTongTien.setText("0");
@@ -69,7 +76,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
                     donHang.getNgayTao(),
                     donHang.getPhuongThucThanhToan(),
                     donHang.getTongSoLuong(),
-                    donHang.getTongTien()
+                    df.format(donHang.getTongTien())
                 });
             }
         }
@@ -104,8 +111,16 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
         tableModelCT.setNumRows(0);
         DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
         List<DonHangChiTiet> dhctlist = dhctdao.FindAll();
+        DecimalFormat df = new DecimalFormat("#,###");
         for (DonHangChiTiet dhct : dhctlist) {
-            tableModelCT.addRow(new Object[]{dhct.getMaDonHangChiTiet(), dhct.getMaDH(), dhct.getTenSP(), dhct.getSoLuong(), dhct.getDonGia(), dhct.getThanhTien()});
+            tableModelCT.addRow(new Object[]{
+                dhct.getMaDonHangChiTiet(),
+                dhct.getMaDH(),
+                dhct.getTenSP(),
+                dhct.getSoLuong(),
+                df.format(dhct.getDonGia()),
+                df.format(dhct.getThanhTien())
+            });
         }
     }
 
@@ -129,18 +144,19 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
 
     private void updateThanhTien() {
         try {
-            String giaNhapStr = txtdongia.getText().trim();
+            String giaNhapStr = txtdongia.getText().trim().replace(",", "");
             int soLuong = (Integer) scrsoluong.getValue();
             if (!giaNhapStr.isEmpty() && soLuong > 0) {
                 BigDecimal giaNhap = new BigDecimal(giaNhapStr);
                 BigDecimal tongChiPhi = giaNhap.multiply(new BigDecimal(soLuong));
-                DecimalFormat df = new DecimalFormat("#,###.##");
-                txtthanhtien.setText(df.format(tongChiPhi));
+                DecimalFormat df = new DecimalFormat("#,###");
+                txtthanhtien.setText(df.format(tongChiPhi) + " VNĐ");
             } else {
-                txtthanhtien.setText("");
+                txtthanhtien.setText("0 VNĐ");
             }
         } catch (NumberFormatException e) {
-            txtthanhtien.setText("");
+            txtthanhtien.setText("0 VNĐ");
+            System.out.println("Lỗi định dạng số trong txtdongia: " + e.getMessage());
         }
     }
 
@@ -173,15 +189,26 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
 
     public void UpdateTongDonHang(String MaDH) {
         DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
-        List<DonHangChiTiet> dhctlist = dhctdao.FindAll();
+        List<DonHangChiTiet> dhctlist = dhctdao.findByMaDH(MaDH); // Sử dụng findByMaDH để lấy đúng danh sách
         int tongsoluong = 0;
         BigDecimal tongtien = BigDecimal.ZERO;
-        for (DonHangChiTiet dhct : dhctlist) {
-            if (dhct.getMaDH().equals(MaDH)) {
-                tongsoluong += dhct.getSoLuong();
-                tongtien = tongtien.add(dhct.getThanhTien());
-            }
+        DecimalFormat df = new DecimalFormat("#,###");
+
+        if (dhctlist == null || dhctlist.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Đơn hàng " + MaDH + " chưa có sản phẩm nào để tính tổng tiền!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
         }
+
+        for (DonHangChiTiet dhct : dhctlist) {
+            tongsoluong += dhct.getSoLuong();
+            BigDecimal thanhTien = (dhct.getThanhTien() != null) ? dhct.getThanhTien() : BigDecimal.ZERO;
+            tongtien = tongtien.add(thanhTien);
+        }
+
+        if (tongtien.compareTo(BigDecimal.ZERO) == 0) {
+            JOptionPane.showMessageDialog(this, "Tổng tiền của đơn hàng " + MaDH + " là 0. Vui lòng kiểm tra lại chi tiết đơn hàng!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        }
+
         DonHangDAO dhdao = new DonHangDAO();
         DonHang dh = dhdao.findId(MaDH);
         if (dh != null) {
@@ -192,12 +219,10 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Không tìm thấy đơn hàng " + MaDH, "Lỗi", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        dh.setTongSoLuong(tongsoluong);
-        dh.setTongTien(tongtien);
-        dhdao.update(dh);
+
         if (txtMaDH.getText().equals(MaDH)) {
             txtSoLuong.setText(String.valueOf(tongsoluong));
-            txtTongTien.setText(String.valueOf(tongtien));
+            txtTongTien.setText(df.format(tongtien));
         }
 
         loadData();
@@ -769,6 +794,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
         String maDH = txtTimKiem.getText().trim();
+        DecimalFormat df = new DecimalFormat("#,###");
 
         if (maDH.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã đơn hàng cần tìm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -788,7 +814,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
                 dh.getNgayTao(),
                 dh.getPhuongThucThanhToan(),
                 dh.getTongSoLuong(),
-                dh.getTongTien()});
+                df.format(dh.getTongTien())});
 
             //Hiển thị thông tin lên textField
             txtMaDH.setText(dh.getMaDH());
@@ -817,22 +843,29 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
                 String maDH = (String) tblDonHang.getValueAt(row, 0);
                 DonHangDAO dao = new DonHangDAO();
                 DonHang dh = dao.findId(maDH);
+                DecimalFormat df = new DecimalFormat("#,###");
                 if (dh != null) {
                     txtMaDH.setText(dh.getMaDH());
                     cboMaNV.setSelectedItem(dh.getTenNV());
                     cboMaKH.setSelectedItem(dh.getSDT());
                     txtNgayTao.setText(String.valueOf(dh.getNgayTao()));
-                    if (dh.getPhuongThucThanhToan().equals("Tiền mặt")) {
+                    if (dh.getPhuongThucThanhToan() != null && dh.getPhuongThucThanhToan().equals("Tiền mặt")) {
                         rdoTienMat.setSelected(true);
                     } else {
                         rdoQR.setSelected(true);
                     }
                     txtSoLuong.setText(String.valueOf(dh.getTongSoLuong()));
-                    txtTongTien.setText(String.valueOf(dh.getTongTien()));
+                    // Kiểm tra TongTien trước khi định dạng
+                    if (dh.getTongTien() != null) {
+                        txtTongTien.setText(df.format(dh.getTongTien()));
+                    } else {
+                        txtTongTien.setText("0");
+                    }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi hiển thị thông tin đơn hàng: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_tblDonHangMouseClicked
 
@@ -1011,9 +1044,23 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             dhct.setMaDH((String) cboMaDH.getSelectedItem());
             dhct.setTenSP((String) cboMaSP.getSelectedItem());
             dhct.setSoLuong(soLuong);
-            dhct.setDonGia(new BigDecimal(txtdongia.getText()));
-            String TongThanhTien = txtthanhtien.getText().replace(",", "");
-            dhct.setThanhTien(new BigDecimal(TongThanhTien));
+
+            // Xử lý đơn giá (txtdongia)
+            String donGiaStr = txtdongia.getText().trim().replace(",", "");
+            if (donGiaStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Đơn giá không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            dhct.setDonGia(new BigDecimal(donGiaStr));
+
+            // Xử lý thành tiền (txtthanhtien)
+            String thanhTienStr = txtthanhtien.getText().trim().replace(",", "").replace(" VNĐ", "");
+            if (thanhTienStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Thành tiền không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            dhct.setThanhTien(new BigDecimal(thanhTienStr));
+
             int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn sửa sản phẩm không");
             if (chon == JOptionPane.YES_OPTION) {
                 DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
@@ -1025,8 +1072,12 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
                     return;
                 }
             }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi định dạng số: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi sửa sản phẩm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnsuaActionPerformed
 
@@ -1104,16 +1155,21 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             SanPhamDAO spDao = new SanPhamDAO();
 
             float GiaBan = dhctDao.getGiaBanBySP(TenSP);
-            txtdongia.setText(String.valueOf(GiaBan));
+            DecimalFormat df = new DecimalFormat("#,###");
+            txtdongia.setText(df.format(GiaBan));
 
             int soLuongTonKho = spDao.getSoLuongByMaSP(TenSP);
-            scrsoluong.setValue(soLuongTonKho);
+            // Đặt giá trị tối đa cho scrsoluong, nhưng không đặt giá trị hiện tại về 0
             scrsoluong.setModel(new SpinnerNumberModel(0, 0, soLuongTonKho, 1));
+            // Nếu số lượng tồn kho là 0, thông báo cho người dùng
+            if (soLuongTonKho == 0) {
+                JOptionPane.showMessageDialog(this, "Sản phẩm " + TenSP + " đã hết hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            }
             updateThanhTien();
         } else {
             txtdongia.setText("");
-            scrsoluong.setValue(0);
-            txtthanhtien.setText("");
+            scrsoluong.setModel(new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1));
+            txtthanhtien.setText("0 VNĐ");
         }
     }//GEN-LAST:event_cboMaSPActionPerformed
 
@@ -1124,12 +1180,14 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             String MaDHCT = (String) tblbang.getValueAt(row, 0);
             DonHangChiTietDAO dhctdao = new DonHangChiTietDAO();
             DonHangChiTiet dhct = dhctdao.FindById(MaDHCT);
+            DecimalFormat df = new DecimalFormat("#,###");
             txtmadhct.setText(dhct.getMaDonHangChiTiet());
             cboMaDH.setSelectedItem(dhct.getMaDH());
             cboMaSP.setSelectedItem(dhct.getTenSP());
             scrsoluong.setValue(dhct.getSoLuong());
-            txtdongia.setText(String.valueOf(dhct.getDonGia()));
-            txtthanhtien.setText(String.valueOf(dhct.getThanhTien()));
+            txtdongia.setText(df.format(dhct.getDonGia()));
+            txtthanhtien.setText(df.format(dhct.getThanhTien()) + " VNĐ");
+            updateThanhTien(); // Gọi lại để đảm bảo tính toán đúng
         }
     }//GEN-LAST:event_tblbangMouseClicked
 
@@ -1144,7 +1202,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Mã đơn hàng chi tiết đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         int soLuong = (Integer) scrsoluong.getValue();
         if (soLuong <= 0) {
             JOptionPane.showMessageDialog(this, "Số lượng phải là số lớn hơn 0");
@@ -1156,9 +1214,23 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
             dhct.setMaDH((String) cboMaDH.getSelectedItem());
             dhct.setTenSP((String) cboMaSP.getSelectedItem());
             dhct.setSoLuong(soLuong);
-            dhct.setDonGia(new BigDecimal(txtdongia.getText()));
-            String TongThanhTien = txtthanhtien.getText().replace(",", "");
-            dhct.setThanhTien(new BigDecimal(TongThanhTien));
+
+            // Xử lý đơn giá (txtdongia)
+            String donGiaStr = txtdongia.getText().trim().replace(",", ""); // Loại bỏ dấu phẩy
+            if (donGiaStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Đơn giá không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            dhct.setDonGia(new BigDecimal(donGiaStr));
+
+            // Xử lý thành tiền (txtthanhtien)
+            String thanhTienStr = txtthanhtien.getText().trim().replace(",", "").replace(" VNĐ", ""); // Loại bỏ dấu phẩy và "VNĐ"
+            if (thanhTienStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Thành tiền không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            dhct.setThanhTien(new BigDecimal(thanhTienStr));
+
             int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn thêm sản phẩm không");
             if (chon == JOptionPane.YES_OPTION) {
                 if (dhctdao.insert(dhct)) {
@@ -1169,8 +1241,12 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
                     return;
                 }
             }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi định dạng số: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi thêm sản phẩm: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnthemActionPerformed
 
@@ -1190,30 +1266,51 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                                    
         String maDH = txtMaDH.getText().trim();
         if (maDH.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập hoặc chọn mã đơn hàng để thanh toán!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // kiem tra don hang da thanh toan
+        // Kiểm tra xem đơn hàng đã được thanh toán hay chưa (kiểm tra trong bảng HoaDon)
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = DataConnection.open();
+            String checkSql = "SELECT COUNT(*) FROM HoaDon WHERE MADH = ?";
+            ps = conn.prepareStatement(checkSql);
+            ps.setString(1, maDH);
+            rs = ps.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(this, "Đơn hàng " + maDH + " đã được thanh toán trước đó! Không thể thanh toán lại.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi kiểm tra trạng thái thanh toán: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        // Nếu chưa thanh toán, tiếp tục quy trình thanh toán
         DonHangChiTietDAO dhctDao = new DonHangChiTietDAO();
         SanPhamDAO spDao = new SanPhamDAO();
         List<DonHangChiTiet> dhctList = dhctDao.findByMaDH(maDH);
-
-        if (dhctList != null && !dhctList.isEmpty()) {
-            for (DonHangChiTiet dhct : dhctList) {
-                String maSP = dhct.getTenSP();
-                int soLuongMua = dhct.getSoLuong();
-                int soLuongTonKho = spDao.getSoLuongByMaSP(maSP);
-                // neu ma ton kho da bi tru so voi ban dau thi coi nhu da thanh toan
-                if (soLuongTonKho >= 0 && soLuongMua > 0) {
-                    JOptionPane.showMessageDialog(this, "Đơn hàng " + maDH + " đã được thanh toán, không thể thanh toán lại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-            }
-        }
 
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thanh toán đơn hàng " + maDH + " không?", "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) {
@@ -1226,7 +1323,7 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
                 return;
             }
 
-            // Thanh toan
+            // Thanh toán: Cập nhật số lượng tồn kho
             for (DonHangChiTiet dhct : dhctList) {
                 String maSP = dhct.getTenSP();
                 int soLuongMua = dhct.getSoLuong();
@@ -1242,16 +1339,77 @@ public class QuanLyDonHangg extends javax.swing.JFrame {
                 }
             }
 
+            // Cập nhật tổng số lượng và tổng tiền
             UpdateTongDonHang(maDH);
 
-            JOptionPane.showMessageDialog(this, "Thanh toán đơn hàng " + maDH + " thành công!\nSố lượng tồn kho đã được cập nhật.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            // Thêm hoặc cập nhật bản ghi vào bảng HoaDon
+            BigDecimal tongTien = BigDecimal.ZERO;
+            try {
+                conn = DataConnection.open();
+
+                // Lấy tổng tiền từ bảng DonHang
+                String sqlTongTien = "SELECT TongTien FROM DonHang WHERE MaDH = ?";
+                ps = conn.prepareStatement(sqlTongTien);
+                ps.setString(1, maDH);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    tongTien = rs.getBigDecimal("TongTien");
+                }
+                rs.close();
+                ps.close();
+
+                // Thêm bản ghi mới vào HoaDon
+                String insertSql = "INSERT INTO HoaDon (MaHoaDon, MADH, NgayThanhToan, TongTien) VALUES (?, ?, ?, ?)";
+                ps = conn.prepareStatement(insertSql);
+                ps.setString(1, "HD" + maDH); // Tạo mã hóa đơn, ví dụ: HD + MaDH
+                ps.setString(2, maDH);
+                ps.setDate(3, new java.sql.Date(System.currentTimeMillis())); // Ngày thanh toán là ngày hiện tại
+                ps.setBigDecimal(4, tongTien);
+                ps.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Lỗi khi thêm hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (conn != null) {
+                        conn.close();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            // Hiển thị thông báo với tổng tiền
+            DecimalFormat df = new DecimalFormat("#,###");
+            JOptionPane.showMessageDialog(this,
+                    "Thanh toán đơn hàng " + maDH + " thành công!\nSố lượng tồn kho đã được cập nhật.\nTổng tiền: " + df.format(tongTien),
+                    "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
             loadData();
             fillCT();
 
+            // Hiển thị hóa đơn
+            JFrame hoaDonFrame = new JFrame("Hóa Đơn - " + maDH);
+            hoaDonFrame.setSize(700, 400);
+            hoaDonFrame.setLocationRelativeTo(null);
+            hoaDonFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            HoaDonJPanel hoaDonPanel = new HoaDonJPanel();
+            hoaDonPanel.loadHoaDon(maDH);
+            hoaDonFrame.add(hoaDonPanel);
+            hoaDonFrame.setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi khi thanh toán: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void cboMaDHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMaDHActionPerformed
