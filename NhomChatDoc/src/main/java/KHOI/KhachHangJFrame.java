@@ -4,6 +4,8 @@
  */
 package KHOI;
 
+import Model.KhachHang;
+import DAO.KhachHangDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;

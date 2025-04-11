@@ -4,7 +4,8 @@
  */
 package LONG;
 
-import PHU.DataConnection;
+import Model.DonHangChiTiet;
+import Model.DataConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

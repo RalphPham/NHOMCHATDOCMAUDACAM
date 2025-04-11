@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package PHU;
+package Model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +17,7 @@ public class DataConnection {
         Connection con=null;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         String username = "sa";
-        String password = "123";
+        String password = "piviola85712";
         String url = "jdbc:sqlserver://localhost:1433;databaseName=QUANLYCHATDOC";
         con = DriverManager.getConnection(url, username, password);
         return con;

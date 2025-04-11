@@ -2,13 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package DUNG;
+package View;
 
-import LONG.DonHangChiTiet;
+import Model.DonHang;
+import DAO.DonHangDAO;
+import Model.DonHangChiTiet;
 import LONG.DonHangChiTietDAO;
-import PHU.DataConnection;
-import PHU.SanPhamDAO;
-import THAI.HoaDonJPanel;
+import Model.DataConnection;
+import DAO.SanPhamDAO;
+import View.HoaDonJPanel;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,7 +52,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         txtSoLuong.setText("0");
         txtTongTien.setText("0");
     }
-
+    
     public void init() {
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"Mã DH", "Tên NV", "SDT", "Ngày tạo", "Phương thức TT", "Tổng số lượng", "Tổng tiền"});
@@ -86,6 +88,24 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         cboMaNV.removeAllItems();
         for (String maNV : listTenNV) {
             cboMaNV.addItem(maNV);
+        }
+    }
+
+    public void loadMaDHToComboBox() {
+        String sql = "SELECT MaDH FROM DonHang";
+        try {
+            Connection conn = DataConnection.open();
+            PreparedStatement pst = conn.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            cboMaDH.removeAllItems();
+            while (rs.next()) {
+                cboMaDH.addItem(rs.getString("MaDH"));
+            }
+            rs.close();
+            pst.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -478,8 +498,8 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                     .addComponent(jLabel13)
                     .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -495,7 +515,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 603, Short.MAX_VALUE)
+            .addGap(0, 631, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -779,7 +799,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 14, Short.MAX_VALUE))
+                .addGap(0, 43, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -974,6 +994,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
 
     private void btnLamMoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiActionPerformed
         // TODO add your handling code here:
+
         txtMaDH.setText("");
         txtNgayTao.setText("");
         txtSoLuong.setText("0");
@@ -1074,6 +1095,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(this, "Thêm đơn hàng thành công");
                     loadData(); // Làm mới bảng tblDonHang
                     UpdateTongDonHang(dh.getMaDH()); // Cập nhật tổng số lượng và tổng tiền
+                    loadMaDHToComboBox();
                 } else {
                     JOptionPane.showMessageDialog(this, "Thêm đơn hàng thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -1122,6 +1144,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             if (dao.delete(dh)) {
                 JOptionPane.showMessageDialog(this, "Xoá đơn hàng thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 loadData();
+                loadMaDHToComboBox();
             } else {
                 JOptionPane.showMessageDialog(this, "Xoá đơn hàng thất bại", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
@@ -1241,6 +1264,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                 if (dhctdao.insert(dhct)) {
                     JOptionPane.showMessageDialog(this, "Thêm thành công");
                     fillCT();
+                    loadMaDHToComboBox();
                 } else {
                     JOptionPane.showMessageDialog(this, "Thêm thất bại");
                     return;
@@ -1334,6 +1358,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
     }//GEN-LAST:event_btntimkiemActionPerformed
 
     private void btnclearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclearActionPerformed
+
         txtmadhct.setText("");
         scrsoluong.setValue(0);
         txtdongia.setText("");
@@ -1406,6 +1431,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                 if (dhctdao.update(dhct)) {
                     JOptionPane.showMessageDialog(this, "Sửa thành công");
                     fillCT();
+                    loadMaDHToComboBox();
                 } else {
                     JOptionPane.showMessageDialog(this, "Sửa thất bại");
                     return;

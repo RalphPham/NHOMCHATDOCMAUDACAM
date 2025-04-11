@@ -4,6 +4,8 @@
  */
 package PHU;
 
+import Model.SanPham;
+import DAO.SanPhamDAO;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;

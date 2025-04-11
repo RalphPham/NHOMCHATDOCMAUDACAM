@@ -4,11 +4,13 @@
  */
 package DUNG;
 
-import LONG.DonHangChiTiet;
+import Model.DonHang;
+import DAO.DonHangDAO;
+import Model.DonHangChiTiet;
 import LONG.DonHangChiTietDAO;
-import PHU.DataConnection;
-import PHU.SanPhamDAO;
-import THAI.HoaDonJPanel;
+import Model.DataConnection;
+import DAO.SanPhamDAO;
+import View.HoaDonJPanel;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -2,9 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package THAI;
+package View;
 
-import PHU.DataConnection;
+import Model.HoaDonChiTiet;
+import Model.HoaDon;
+import DAO.HoaDonDAO;
+import Model.DataConnection;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

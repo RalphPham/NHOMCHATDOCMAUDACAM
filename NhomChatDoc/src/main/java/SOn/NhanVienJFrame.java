@@ -4,6 +4,8 @@
  */
 package SOn;
 
+import Model.NhanVien;
+import DAO.NhanVienDAO;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
