@@ -20,10 +20,11 @@ public class DAOTK {
     public List<Object[]> thongKeTheoNam(int nam) {
         List<Object[]> list = new ArrayList<>();
         String sql = "SELECT sp.TenSP, sp.Hang, "
+                + "SUM(dhct.SoLuong) as SoLuong,"
                 + "SUM(dhct.ThanhTien) AS DoanhThu, "
                 + "SUM(sp.TongChiPhiNhapHang) AS TongChiPhiNhapHang, "
-                + "SUM(dh.TongTien) AS TongTien, "
-                + "SUM(dhct.SoLuong * dhct.DonGia) - SUM(sp.TongChiPhiNhapHang) AS LoiNhuan "
+                + "SUM(dhct.ThanhTien) - SUM(sp.TongChiPhiNhapHang) AS LoiNhuan, "
+                + "SUM(dh.TongTien) AS TongTien "
                 + "FROM DonHangChiTiet dhct "
                 + "JOIN DonHang dh ON dh.MaDH = dhct.MaDH "
                 + "JOIN SanPham sp ON sp.TenSP = dhct.TenSP "
@@ -38,6 +39,7 @@ public class DAOTK {
                 list.add(new Object[]{
                     rs.getString("TenSP"),
                     rs.getString("Hang"),
+                    rs.getDouble("SoLuong"),
                     rs.getDouble("DoanhThu"),
                     rs.getDouble("TongChiPhiNhapHang"),
                     rs.getString("LoiNhuan"),
