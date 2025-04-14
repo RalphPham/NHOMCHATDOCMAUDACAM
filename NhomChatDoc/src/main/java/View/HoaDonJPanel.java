@@ -23,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class HoaDonJPanel extends javax.swing.JPanel {
 
+    private List<HoaDon> danhSachHoaDon;
     DefaultTableModel tbModel;
     private BigDecimal tongTien;
     private String maDH; // Biến để lưu maDH
@@ -33,7 +34,7 @@ public class HoaDonJPanel extends javax.swing.JPanel {
     public HoaDonJPanel() {
         initComponents();
         init();
-        
+
     }
 
     void init() {
@@ -41,18 +42,58 @@ public class HoaDonJPanel extends javax.swing.JPanel {
         tbModel.setColumnIdentifiers(new String[]{"Mã hóa đơn", "Ngày thanh toán", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền", "Tổng tiền"});
         tblhoadon.setModel(tbModel);
         loadAllHoaDon();
+
+        btntimkiem.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                String maDH = txttimkiem.getText().trim();
+                DecimalFormat df = new DecimalFormat("#,###");
+
+                if (maDH.isEmpty()) {
+                    JOptionPane.showMessageDialog(HoaDonJPanel.this, "Vui lòng nhập mã đơn hàng để tìm kiếm!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                    loadAllHoaDon();
+                    return;
+                }
+
+                tbModel.setRowCount(0);
+
+                boolean found = false;
+                for (HoaDon hoaDon : danhSachHoaDon) {
+                    if (hoaDon.getMaHoaDon().equalsIgnoreCase(maDH)) {
+                        found = true;
+                        for (HoaDonChiTiet chiTiet : hoaDon.getChiTietList()) {
+                            tbModel.addRow(new Object[]{
+                                hoaDon.getMaHoaDon(),
+                                hoaDon.getNgayThanhToan().toString(),
+                                chiTiet.getTenSP(),
+                                chiTiet.getSoLuong(),
+                                df.format(chiTiet.getDonGia()),
+                                df.format(chiTiet.getThanhTien()),
+                                ""
+                            });
+                        }
+                        String tongTien = hoaDon.getTongTien() != null ? df.format(hoaDon.getTongTien()) : "0";
+                        tbModel.addRow(new Object[]{"", "", "", "", "", "Tổng tiền:", tongTien});
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    JOptionPane.showMessageDialog(HoaDonJPanel.this, "Không tìm thấy hóa đơn với mã " + maDH + "!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    loadAllHoaDon();
+                }
+            }
+        });
+
     }
-
-
-    
 
     public void loadAllHoaDon() {
         tbModel.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         HoaDonDAO hd = new HoaDonDAO();
-        DecimalFormat df = new DecimalFormat("#,###"); // Định dạng số
+        DecimalFormat df = new DecimalFormat("#,###");
 
         try {
-            List<HoaDon> danhSachHoaDon = hd.findAll();
+            danhSachHoaDon = hd.findAll(); // Lưu danh sách hóa đơn
 
             if (danhSachHoaDon.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Không có hóa đơn nào đã thanh toán trong cơ sở dữ liệu!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -61,7 +102,6 @@ public class HoaDonJPanel extends javax.swing.JPanel {
 
             // Hiển thị dữ liệu lên bảng
             for (HoaDon hoaDon : danhSachHoaDon) {
-                // Hiển thị các dòng chi tiết của hóa đơn
                 for (HoaDonChiTiet chiTiet : hoaDon.getChiTietList()) {
                     tbModel.addRow(new Object[]{
                         hoaDon.getMaHoaDon(),
@@ -70,11 +110,9 @@ public class HoaDonJPanel extends javax.swing.JPanel {
                         chiTiet.getSoLuong(),
                         df.format(chiTiet.getDonGia()),
                         df.format(chiTiet.getThanhTien()),
-                        "" // Để trống cột Tổng tiền ở các dòng chi tiết
+                        ""
                     });
                 }
-
-                // Thêm dòng tổng tiền cho hóa đơn
                 String tongTien = hoaDon.getTongTien() != null ? df.format(hoaDon.getTongTien()) : "0";
                 tbModel.addRow(new Object[]{"", "", "", "", "", "Tổng tiền:", tongTien});
             }
@@ -240,6 +278,9 @@ public class HoaDonJPanel extends javax.swing.JPanel {
         tblhoadon = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txttimkiem = new javax.swing.JTextField();
+        btntimkiem = new javax.swing.JButton();
 
         jLabel2.setText("jLabel2");
 
@@ -260,6 +301,10 @@ public class HoaDonJPanel extends javax.swing.JPanel {
         jLabel1.setText("HÓA ĐƠN");
         jPanel1.add(jLabel1);
 
+        jLabel3.setText("Tìm kiếm theo MaHD:");
+
+        btntimkiem.setText("Tìm kiếm");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -267,25 +312,41 @@ public class HoaDonJPanel extends javax.swing.JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btntimkiem)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btntimkiem))
+                .addGap(9, 9, 9)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btntimkiem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblhoadon;
+    private javax.swing.JTextField txttimkiem;
     // End of variables declaration//GEN-END:variables
 }

@@ -52,7 +52,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         txtSoLuong.setText("0");
         txtTongTien.setText("0");
     }
-    
+
     public void init() {
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"Mã DH", "Tên NV", "SDT", "Ngày tạo", "Phương thức TT", "Tổng số lượng", "Tổng tiền"});
@@ -287,7 +287,6 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         txtMaDH = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         btnThanhToan = new javax.swing.JButton();
-        txtNgayTao = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         rdoTienMat = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
@@ -312,6 +311,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         btnThem = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnSua = new javax.swing.JButton();
+        txtNgayTao = new com.toedter.calendar.JDateChooser();
 
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(782, 638));
 
@@ -698,14 +698,6 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                                 .addComponent(rdoQR))
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtNgayTao, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cboMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(jLabel2)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cboMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -713,7 +705,15 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                                     .addComponent(jLabel1)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(txtMaDH, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel4))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txtNgayTao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cboMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -758,8 +758,10 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                             .addComponent(cboMaKH, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(txtNgayTao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(6, 6, 6))
+                            .addComponent(txtNgayTao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -972,7 +974,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
                     txtMaDH.setText(dh.getMaDH());
                     cboMaNV.setSelectedItem(dh.getTenNV());
                     cboMaKH.setSelectedItem(dh.getSDT());
-                    txtNgayTao.setText(String.valueOf(dh.getNgayTao()));
+                    txtNgayTao.setDate(dh.getNgayTao());
                     if (dh.getPhuongThucThanhToan() != null && dh.getPhuongThucThanhToan().equals("Tiền mặt")) {
                         rdoTienMat.setSelected(true);
                     } else {
@@ -997,7 +999,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
         // TODO add your handling code here:
 
         txtMaDH.setText("");
-        txtNgayTao.setText("");
+        txtNgayTao.setDate(null);
         txtSoLuong.setText("0");
         txtTongTien.setText("0");
         txtTimKiem.setText("");
@@ -1033,7 +1035,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             txtMaDH.setText(dh.getMaDH());
             cboMaNV.setSelectedItem(dh.getTenNV());
             cboMaKH.setSelectedItem(dh.getSDT());
-            txtNgayTao.setText(String.valueOf(dh.getNgayTao()));
+            txtNgayTao.setDate(dh.getNgayTao());
             if (dh.getPhuongThucThanhToan().equals("Tiền mặt")) {
                 rdoTienMat.setSelected(true);
             } else {
@@ -1060,7 +1062,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Mã đơn hàng đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        if (txtNgayTao.getText().equals("")) {
+        if (txtNgayTao.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày tạo đơn hàng");
             return;
         }
@@ -1072,16 +1074,9 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             DonHang dh = new DonHang();
             dh.setMaDH(txtMaDH.getText());
             dh.setTenNV((String) cboMaNV.getSelectedItem());
-            dh.setSDT((String) cboMaKH.getSelectedItem());
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                sdf.setLenient(false);
-                Date utilDate = sdf.parse(txtNgayTao.getText().trim());
-                dh.setNgayTao(new java.sql.Date(utilDate.getTime()));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Ngày tạo không hợp lệ. Định dạng đúng: yyyy-MM-dd.");
-                return;
-            }
+            dh.setSDT((String) cboMaKH.getSelectedItem());        
+                java.sql.Date sqlDate = new java.sql.Date(txtNgayTao.getDate().getTime());
+                dh.setNgayTao(sqlDate);        
             if (rdoTienMat.isSelected()) {
                 dh.setPhuongThucThanhToan("Tiền mặt");
             } else {
@@ -1159,11 +1154,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             return;
         }
         DonHangDAO dao = new DonHangDAO();
-        if (!dao.checkMaDH(txtMaDH.getText())) {
-            JOptionPane.showMessageDialog(this, "Mã đơn hàng không tồn tại!");
-            return;
-        }
-        if (txtNgayTao.getText().equals("")) {
+        if (txtNgayTao.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập ngày tạo đơn hàng");
             return;
         }
@@ -1175,17 +1166,9 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             DonHang dh = new DonHang();
             dh.setMaDH(txtMaDH.getText());
             dh.setTenNV((String) cboMaNV.getSelectedItem());
-            dh.setSDT((String) cboMaKH.getSelectedItem());
-
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                sdf.setLenient(false);
-                Date utilDate = sdf.parse(txtNgayTao.getText().trim());
-                dh.setNgayTao(new java.sql.Date(utilDate.getTime()));
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Ngày tạo không hợp lệ. Định dạng đúng: yyyy-MM-dd.");
-                return;
-            }
+            dh.setSDT((String) cboMaKH.getSelectedItem());        
+                java.sql.Date sqlDate = new java.sql.Date(txtNgayTao.getDate().getTime());
+                dh.setNgayTao(sqlDate);        
             if (rdoTienMat.isSelected()) {
                 dh.setPhuongThucThanhToan("Tiền mặt");
             } else {
@@ -1194,13 +1177,14 @@ public class QuanLyDonHang extends javax.swing.JPanel {
             dh.setTongSoLuong(0);
             dh.setTongTien(BigDecimal.ZERO);
 
-            int chon = JOptionPane.showConfirmDialog(this, "Bạn muốn cập nhật thông tin đơn hàng không ?", "Thông báo", JOptionPane.YES_NO_OPTION);
+            int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn sửa đơn hàng không?", "Thông báo", JOptionPane.YES_NO_OPTION);
             if (chon == JOptionPane.YES_OPTION) {
                 if (dao.update(dh)) {
-                    JOptionPane.showMessageDialog(this, "Cập nhật thông tin đơn hàng thành công");
-                    UpdateTongDonHang(dh.getMaDH()); // Cập nhật tổng số lượng và tổng tiền
+                    JOptionPane.showMessageDialog(this, "Sửa đơn hàng thành công");
+                    loadData(); // Làm mới bảng tblDonHang
+                    loadMaDHToComboBox();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Cập nhật thông tin đơn hàng thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Sửa đơn hàng thất bại", "Thông báo", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
@@ -1497,7 +1481,7 @@ public class QuanLyDonHang extends javax.swing.JPanel {
     private javax.swing.JTable tblDonHang;
     private javax.swing.JTable tblbang;
     private javax.swing.JTextField txtMaDH;
-    private javax.swing.JTextField txtNgayTao;
+    private com.toedter.calendar.JDateChooser txtNgayTao;
     private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtTimKiem;
     private javax.swing.JTextField txtTongTien;

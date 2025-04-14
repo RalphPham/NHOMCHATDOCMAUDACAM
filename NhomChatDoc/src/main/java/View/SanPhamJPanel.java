@@ -127,7 +127,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         txtsoluong = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        txtthoigian = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         txtmota = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
@@ -138,6 +137,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnmoi = new javax.swing.JButton();
+        txtthoigian = new com.toedter.calendar.JDateChooser();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("QUẢN LÝ SẢN PHẨM");
@@ -253,8 +253,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtthoigian))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtthoigian, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -305,12 +305,13 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                     .addComponent(txtsoluong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSua))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtgianhap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtthoigian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnXoa))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(txtgianhap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9)
+                        .addComponent(btnXoa))
+                    .addComponent(txtthoigian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -377,7 +378,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng");
             return;
         }
-        if (txtthoigian.getText().equals("")) {
+        if (txtthoigian.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập thời gian");
             return;
         }
@@ -397,8 +398,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             sp.setSoluongnhap(Integer.parseInt(txtsoluong.getText()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             sdf.setLenient(false);
-            Date utilDate = sdf.parse(txtthoigian.getText().trim());
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            java.sql.Date sqlDate = new java.sql.Date(txtthoigian.getDate().getTime());
+            sp.setThoigiannhaphang(sqlDate);
             sp.setThoigiannhaphang(sqlDate);
             // Lấy tổng chi phí từ txttong (đã được tính tự động)
             String TongChiPhiNhap = txttong.getText().replace(",", ""); // Loại bỏ dấu phẩy nếu có
@@ -442,7 +443,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng");
             return;
         }
-        if (txtthoigian.getText().equals("")) {
+        if (txtthoigian.getDate()==null) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập thời gian");
             return;
         }
@@ -466,8 +467,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             sp.setSoluongnhap(Integer.parseInt(txtsoluong.getText()));
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             sdf.setLenient(false);
-            Date utilDate = sdf.parse(txtthoigian.getText().trim());
-            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            java.sql.Date sqlDate = new java.sql.Date(txtthoigian.getDate().getTime());
+            sp.setThoigiannhaphang(sqlDate);
             sp.setThoigiannhaphang(sqlDate);
             // Lấy tổng chi phí từ txttong (đã được tính tự động)
             String TongChiPhiNhap = txttong.getText().replace(",", ""); // Loại bỏ dấu phẩy nếu có
@@ -550,7 +551,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         txtgiaban.setText("");
         cbohang.setSelectedItem("");
         txtsoluong.setText("");
-        txtthoigian.setText("");
+        txtthoigian.setDate(null);
         txtmota.setText("");
         txttong.setText("");
         txttimkiem.setText("");
@@ -569,7 +570,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             txtgianhap.setText(String.valueOf(sp.getGianhap()));
             txtgiaban.setText(String.valueOf(sp.getGiaban()));
             txtsoluong.setText(String.valueOf(sp.getSoluongnhap()));
-            txtthoigian.setText(String.valueOf(sp.getThoigiannhaphang()));
+            txtthoigian.setDate(sp.getThoigiannhaphang());
             txttong.setText(String.valueOf(sp.getTongchiphi()));
             txtmota.setText(sp.getMota());
         }
@@ -604,7 +605,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtmota;
     private javax.swing.JTextField txtsoluong;
     private javax.swing.JTextField txtten;
-    private javax.swing.JTextField txtthoigian;
+    private com.toedter.calendar.JDateChooser txtthoigian;
     private javax.swing.JTextField txttimkiem;
     private javax.swing.JTextField txttong;
     // End of variables declaration//GEN-END:variables
