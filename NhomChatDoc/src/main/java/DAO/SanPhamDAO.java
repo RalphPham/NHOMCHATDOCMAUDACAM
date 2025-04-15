@@ -216,4 +216,62 @@ public class SanPhamDAO {
         }
         return false;
     }
+    
+    public List<SanPham> findByMa (String ma){
+        String sql="Select * from SanPham where MaSP like ?";
+        try {
+            Connection conn = DataConnection.open();
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, ma);
+            List<SanPham> list = new ArrayList<>();
+            ResultSet rs = p.executeQuery();
+            while(rs.next()){
+                SanPham sp = new SanPham();
+                sp.setMasp(rs.getString("MaSP"));
+                sp.setTensp(rs.getString("TenSP"));
+                sp.setHang(rs.getString("Hang"));
+                sp.setGianhap(rs.getBigDecimal("GiaNhap"));
+                sp.setGiaban(rs.getBigDecimal("GiaBan"));
+                sp.setSoluongnhap(rs.getInt("SoluongNhap"));
+                sp.setThoigiannhaphang(rs.getDate("ThoiGianNhapHang"));
+                sp.setTongchiphi(rs.getBigDecimal("TongChiPhiNhapHang"));
+                sp.setMota(rs.getString("MoTa"));
+                
+                list.add(sp);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<SanPham> findByTen (String ten){
+        String sql="Select * from SanPham where TenSP like ?";
+        try {
+            Connection conn = DataConnection.open();
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, ten);
+            List<SanPham> list = new ArrayList<>();
+            ResultSet rs = p.executeQuery();
+            while(rs.next()){
+                SanPham sp = new SanPham();
+                sp.setMasp(rs.getString("MaSP"));
+                sp.setTensp(rs.getString("TenSP"));
+                sp.setHang(rs.getString("Hang"));
+                sp.setGianhap(rs.getBigDecimal("GiaNhap"));
+                sp.setGiaban(rs.getBigDecimal("GiaBan"));
+                sp.setSoluongnhap(rs.getInt("SoluongNhap"));
+                sp.setThoigiannhaphang(rs.getDate("ThoiGianNhapHang"));
+                sp.setTongchiphi(rs.getBigDecimal("TongChiPhiNhapHang"));
+                sp.setMota(rs.getString("MoTa"));
+                
+                list.add(sp);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

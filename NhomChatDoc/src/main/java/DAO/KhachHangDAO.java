@@ -127,4 +127,54 @@ public class KhachHangDAO {
         }
         return false;
     }
+     
+     public List<KhachHang> findByMa (String ma){
+        String sql="Select * from KhachHang where MaKH like ?";
+        try {
+            Connection conn = DataConnection.open();
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, ma);
+            List<KhachHang> list = new ArrayList<>();
+            ResultSet rs = p.executeQuery();
+            while(rs.next()){
+                KhachHang kh = new KhachHang();
+                kh.setMaKH(rs.getString("MaKH"));
+                kh.setTenKH(rs.getString("TenKH"));
+                kh.setSDT(rs.getString("SDT"));
+                kh.setGioiTinh(rs.getString("GioiTinh"));
+                kh.setDiaChi(rs.getString("DiaChi"));
+                
+                list.add(kh);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public List<KhachHang> findByTen (String ten){
+        String sql="Select * from KhachHang where TenKH like ?";
+        try {
+            Connection conn = DataConnection.open();
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, ten);
+            List<KhachHang> list = new ArrayList<>();
+            ResultSet rs = p.executeQuery();
+            while(rs.next()){
+                KhachHang kh = new KhachHang();
+                kh.setMaKH(rs.getString("MaKH"));
+                kh.setTenKH(rs.getString("TenKH"));
+                kh.setSDT(rs.getString("SDT"));
+                kh.setGioiTinh(rs.getString("GioiTinh"));
+                kh.setDiaChi(rs.getString("DiaChi"));
+                
+                list.add(kh);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

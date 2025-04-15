@@ -9,12 +9,15 @@ import DAO.KhachHangDAO;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author admin
  */
 public class KhachHangJPanel extends javax.swing.JPanel {
+
     DefaultTableModel tbModel;
+
     /**
      * Creates new form KhachHangJPanel
      */
@@ -23,7 +26,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         init();
         loaddatatotable();
     }
-    
+
     public void init() {
         tbModel = new DefaultTableModel();
         tbModel.setColumnIdentifiers(new String[]{"Mã KH", "Tên KH", "Số điện thoại", "Giới tính", "Địa chỉ"});
@@ -46,6 +49,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         txtSdt.setText(null);
         txtTenKH.setText(null);
         txtTimKiem.setText(null);
+        loaddatatotable();
     }
 
     void Them() {
@@ -195,51 +199,96 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     }
 
     void TimKiem() {
-        String maKH = txtTimKiem.getText().trim();
+//        String maKH = txtTimKiem.getText().trim();
+//
+//        // Kiểm tra nếu mã nhân viên để trống
+//        if (maKH.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã khách hàng để tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            loaddatatotable();
+//            return;
+//        }
+//
+//        KhachHangDAO NVDAL = new KhachHangDAO();
+//        KhachHang kh = NVDAL.findByID(maKH);
+//
+//        // Kiểm tra nếu không tìm thấy nhân viên
+//        
+//        if (kh != null) {
+//            tbModel.setRowCount(0);
+//            tbModel.addRow(new Object[]{
+//                kh.getMaKH(),
+//                kh.getTenKH(),
+//                kh.getSDT(),
+//                kh.getGioiTinh(),
+//                kh.getDiaChi()
+//            });
+//        // Hiển thị thông tin nhân viên
+//        txtMaKH.setText(kh.getMaKH());
+//        txtTenKH.setText(kh.getTenKH());
+//        txtSdt.setText(kh.getSDT());
+//        txtDiaChi.setText(kh.getDiaChi());
+//
+//        // Xử lý radio button giới tính
+//        if ("Nam".equals(kh.getGioiTinh())) {
+//            rdoNam.setSelected(true);
+//        } else if ("Nữ".equals(kh.getGioiTinh())) {
+//            rdoNu.setSelected(true);
+//        } else {
+//            rdoNam.setSelected(false);
+//            rdoNu.setSelected(false);
+//        }
+//        }else{
+//            JOptionPane.showMessageDialog(this, "Không tìm thấy mã khách hàng");
+//            return;
+//        }
+//        // Thông báo tìm kiếm thành công
+//        JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 
-        // Kiểm tra nếu mã nhân viên để trống
-        if (maKH.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã khách hàng để tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            loaddatatotable();
+        if (txtTimKiem.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập vào tìm kiếm và chọn combobox");
             return;
         }
-
-        KhachHangDAO NVDAL = new KhachHangDAO();
-        KhachHang kh = NVDAL.findByID(maKH);
-
-        // Kiểm tra nếu không tìm thấy nhân viên
-        
-        if (kh != null) {
+        if (cboTimKiem.getSelectedItem().equals("Mã")) {
             tbModel.setRowCount(0);
-            tbModel.addRow(new Object[]{
-                kh.getMaKH(),
-                kh.getTenKH(),
-                kh.getSDT(),
-                kh.getGioiTinh(),
-                kh.getDiaChi()
-            });
-        // Hiển thị thông tin nhân viên
-        txtMaKH.setText(kh.getMaKH());
-        txtTenKH.setText(kh.getTenKH());
-        txtSdt.setText(kh.getSDT());
-        txtDiaChi.setText(kh.getDiaChi());
-
-        // Xử lý radio button giới tính
-        if ("Nam".equals(kh.getGioiTinh())) {
-            rdoNam.setSelected(true);
-        } else if ("Nữ".equals(kh.getGioiTinh())) {
-            rdoNu.setSelected(true);
-        } else {
-            rdoNam.setSelected(false);
-            rdoNu.setSelected(false);
+            try {
+                KhachHangDAO dao = new KhachHangDAO();
+                List<KhachHang> list = dao.findByMa(txtTimKiem.getText());
+                if (list.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng theo mã", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    for (KhachHang kh : list) {
+                        tbModel.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(), kh.getSDT(), kh.getGioiTinh(), kh.getDiaChi()});
+                    }
+                    JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    
+                }
+            } catch (Exception e) {
+            }
         }
-        }else{
-            JOptionPane.showMessageDialog(this, "Không tìm thấy mã khách hàng");
+
+        if (txtTimKiem.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập vào tìm kiếm và chọn combobox");
             return;
         }
-        // Thông báo tìm kiếm thành công
-        JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        if (cboTimKiem.getSelectedItem().equals("Tên")) {
+            tbModel.setRowCount(0);
+            try {
+                KhachHangDAO dao = new KhachHangDAO();
+                List<KhachHang> list = dao.findByTen(txtTimKiem.getText());
+                if (list.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng theo tên", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    for (KhachHang kh : list) {
+                        tbModel.addRow(new Object[]{kh.getMaKH(), kh.getTenKH(), kh.getSDT(), kh.getGioiTinh(), kh.getDiaChi()});
+                    }
+                    JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    
+                }
+            } catch (Exception e) {
+            }
+        }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -273,6 +322,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         btnSua = new javax.swing.JButton();
         btnXoa = new javax.swing.JButton();
         btnLamMoi = new javax.swing.JButton();
+        cboTimKiem = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 51, 51));
@@ -352,6 +402,8 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             }
         });
 
+        cboTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã", "Tên" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -367,7 +419,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                         .addComponent(jLabel5)
                                         .addGap(30, 30, 30)
-                                        .addComponent(txtSdt))
+                                        .addComponent(txtSdt, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel4)
@@ -378,8 +430,10 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                                             .addComponent(txtMaKH)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                         .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cboTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(31, 31, 31))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
@@ -409,7 +463,8 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem))
+                    .addComponent(btnTimKiem)
+                    .addComponent(cboTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -498,6 +553,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnXoa;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> cboTimKiem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

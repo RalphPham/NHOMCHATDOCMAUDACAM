@@ -17,14 +17,49 @@ import java.util.List;
  */
 public class DAOTK {
 
+//    public List<Object[]> thongKeTheoNam(int nam) {
+//        List<Object[]> list = new ArrayList<>();
+//        String sql = "SELECT sp.TenSP, sp.Hang, "
+//                + "SUM(dhct.SoLuong) as SoLuong,"
+//                + "SUM(dhct.ThanhTien) AS DoanhThu, "
+//                + "SUM(sp.GiaNhap * dhct.SoLuong) AS ChiPhiNhapHang, "
+//                + "SUM(dhct.ThanhTien) - SUM(sp.GiaNhap * dhct.SoLuong) AS LoiNhuan "
+////                + " SUM(dhct.ThanhTien) AS TongTien "
+//                + "FROM DonHangChiTiet dhct "
+//                + "JOIN DonHang dh ON dh.MaDH = dhct.MaDH "
+//                + "JOIN SanPham sp ON sp.TenSP = dhct.TenSP "
+//                + "WHERE YEAR(dh.NgayTaoDH) = ? "
+//                + "GROUP BY sp.TenSP, sp.Hang";
+//        try {
+//            Connection conn = DataConnection.open();
+//            PreparedStatement p = conn.prepareStatement(sql);
+//            p.setInt(1, nam);
+//            ResultSet rs = p.executeQuery();
+//            while (rs.next()) {
+//                list.add(new Object[]{
+//                    rs.getString("TenSP"),
+//                    rs.getString("Hang"),
+//                    rs.getDouble("SoLuong"),
+//                    rs.getDouble("DoanhThu"),
+//                    rs.getDouble("ChiPhiNhapHang"),
+//                    rs.getDouble("LoiNhuan")
+////                    rs.getDouble("TongTien")
+//                });
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return list;
+//    }
+    
+
     public List<Object[]> thongKeTheoNam(int nam) {
         List<Object[]> list = new ArrayList<>();
         String sql = "SELECT sp.TenSP, sp.Hang, "
-                + "SUM(dhct.SoLuong) as SoLuong,"
+                + "SUM(dhct.SoLuong) as SoLuong, "
                 + "SUM(dhct.ThanhTien) AS DoanhThu, "
-                + "SUM(sp.TongChiPhiNhapHang) AS TongChiPhiNhapHang, "
-                + "SUM(dhct.ThanhTien) - SUM(sp.TongChiPhiNhapHang) AS LoiNhuan, "
-                + "SUM(dh.TongTien) AS TongTien "
+                + "SUM(sp.GiaNhap * dhct.SoLuong) AS ChiPhiNhapHang, "
+                + "(SUM(dhct.ThanhTien) - SUM(sp.GiaNhap * dhct.SoLuong)) AS LoiNhuan "
                 + "FROM DonHangChiTiet dhct "
                 + "JOIN DonHang dh ON dh.MaDH = dhct.MaDH "
                 + "JOIN SanPham sp ON sp.TenSP = dhct.TenSP "
@@ -41,14 +76,17 @@ public class DAOTK {
                     rs.getString("Hang"),
                     rs.getDouble("SoLuong"),
                     rs.getDouble("DoanhThu"),
-                    rs.getDouble("TongChiPhiNhapHang"),
-                    rs.getString("LoiNhuan"),
-                    rs.getDouble("TongTien")
+                    rs.getDouble("ChiPhiNhapHang"),
+                    rs.getDouble("LoiNhuan")
                 });
             }
+            rs.close();
+            p.close();
+            conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
 }
+

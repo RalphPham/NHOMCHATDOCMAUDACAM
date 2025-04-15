@@ -22,7 +22,7 @@ DAOTK dao = new DAOTK();
         loadComboBoxNam();
     }
     private void loadComboBoxNam() {
-    cboNam.removeAllItems(); // Xóa dữ liệu cũ nếu có
+    cboNam.removeAllItems();
 
     for (int nam = 2022; nam <= 2025; nam++) {
         cboNam.addItem(String.valueOf(nam));

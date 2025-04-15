@@ -4,42 +4,114 @@
  */
 package View;
 
-import DAO.DAOTK;
-import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import DAO.DAOTK;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 /**
  *
  * @author admin
  */
 public class ThongKe extends javax.swing.JPanel {
-    DAOTK dao = new DAOTK();
-    /**
-     * Creates new form ThongKe
-     */
+private DefaultTableModel tbModel;
+    private DAOTK dao = new DAOTK();
+
+
     public ThongKe() {
         initComponents();
+        initTable();
         loadComboBoxNam();
     }
-    private void loadComboBoxNam() {
-    cboNam.removeAllItems();
-
-    for (int nam = 2022; nam <= 2025; nam++) {
-        cboNam.addItem(String.valueOf(nam));
+    
+    private void initTable(){
+        tbModel = new DefaultTableModel(
+            new Object[][]{},
+            new String[]{"Sản phẩm", "Hãng", "Số lượng", "Doanh thu", "Chi phí nhập hàng", "Lợi nhuận"}
+                
+        );
+        tblThongKe.setModel(tbModel);
     }
-}
+
+    private void loadComboBoxNam() {
+        // Vô hiệu hóa ActionListener tạm thời để tránh gọi loadThongKeTheoNam() khi thêm item
+        ActionListener[] listeners = cboNam.getActionListeners();
+        for (ActionListener listener : listeners) {
+            cboNam.removeActionListener(listener);
+        }
+
+        // Thêm các năm vào JComboBox
+        cboNam.removeAllItems();
+        for (int nam = 2022; nam <= 2025; nam++) {
+            cboNam.addItem(String.valueOf(nam));
+        }
+
+        // Kích hoạt lại ActionListener
+        for (ActionListener listener : listeners) {
+            cboNam.addActionListener(listener);
+        }
+    }
 
     private void loadThongKeTheoNam() {
-    int nam = Integer.parseInt(cboNam.getSelectedItem().toString());
-    List<Object[]> danhSach = dao.thongKeTheoNam(nam);
+        if (cboNam.getSelectedItem() == null) {
+            return; // Tránh lỗi nếu chưa có năm nào được chọn
+        }
 
-    DefaultTableModel model = (DefaultTableModel) tblThongKe.getModel();
-    model.setRowCount(0);
+        int nam = Integer.parseInt(cboNam.getSelectedItem().toString());
+        List<Object[]> danhSach = dao.thongKeTheoNam(nam);
 
-    for (Object[] row : danhSach) {
-        model.addRow(row);
+        tbModel.setRowCount(0); // Xóa dữ liệu cũ
+        DecimalFormat df = new DecimalFormat("#,###");
+        double tongDoanhThu = 0.0;
+        double tongSoLuong = 0.0;
+        double tongChiPhiNhapHang = 0.0;
+        double tongLoiNhuan = 0.0;
+
+        try {
+            if (danhSach.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Không có dữ liệu thống kê cho năm " + nam + "!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            // Hiển thị dữ liệu lên bảng
+            for (Object[] row : danhSach) {
+                String tenSP = (String) row[0];
+                String hang = (String) row[1];
+                double soLuong = (Double) row[2];
+                double doanhThu = (Double) row[3];
+                double chiPhiNhapHang = (Double) row[4];
+                double loiNhuan = (Double) row[5];
+
+                // Tích lũy tổng doanh thu
+                tongDoanhThu += doanhThu;
+                tongSoLuong += soLuong;
+                tongChiPhiNhapHang += chiPhiNhapHang;
+                tongLoiNhuan += loiNhuan;
+                
+                tbModel.addRow(new Object[]{
+                    tenSP,
+                    hang,
+                    df.format(soLuong),
+                    df.format(doanhThu),
+                    df.format(chiPhiNhapHang),
+                    df.format(loiNhuan)
+                });
+            }
+
+            // Thêm dòng tổng doanh thu
+            tbModel.addRow(new Object[]{"Tổng", "",df.format(tongSoLuong), df.format(tongDoanhThu), df.format(tongChiPhiNhapHang),df.format(tongLoiNhuan)});
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu thống kê: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
-}
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -70,13 +142,13 @@ public class ThongKe extends javax.swing.JPanel {
 
         tblThongKe.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Sản phẩm", "Hãng", "Số lượng", "Doanh thu", "Tổng chi phí nhập hàng", "Lợi nhuận", "Tổng doanh thu"
+                "Sản phẩm", "Hãng", "Số lượng", "Doanh thu", "Chi phí nhập hàng", "Lợi nhuận"
             }
         ));
         jScrollPane1.setViewportView(tblThongKe);

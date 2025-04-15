@@ -112,7 +112,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txttimkiem = new javax.swing.JTextField();
+        txtTimKiem = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtma = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -138,6 +138,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         btnXoa = new javax.swing.JButton();
         btnmoi = new javax.swing.JButton();
         txtthoigian = new com.toedter.calendar.JDateChooser();
+        cboTimKiem = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("QUẢN LÝ SẢN PHẨM");
@@ -218,21 +219,26 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             }
         });
 
+        cboTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã", "Tên" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtma, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtma, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtTimKiem)
+                                .addGap(18, 18, 18)
+                                .addComponent(cboTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -288,8 +294,9 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txttimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTimKiem))
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKiem)
+                    .addComponent(cboTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -519,24 +526,48 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
         // TODO add your handling code here:
-        if (txttimkiem.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Điền mã sản phẩm cần tìm kiếm!");
-            fill();
+          // Thông báo tìm kiếm thành công
+//        JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+        if (txtTimKiem.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập vào tìm kiếm và chọn combobox");
             return;
         }
-        int chon = JOptionPane.showConfirmDialog(this, "Bạn có muốn tìm sản phẩm?", "Thông báo", JOptionPane.YES_NO_OPTION);
-        if (chon == JOptionPane.YES_OPTION) {
+        if (cboTimKiem.getSelectedItem().equals("Mã")) {
+            tbModel.setRowCount(0);
             try {
-                List<SanPham> list = SanPhamDAO.SearchSanPham(txttimkiem.getText());
-                if (list != null) {
-                    tbModel.setNumRows(0);
+                SanPhamDAO dao = new SanPhamDAO();
+                List<SanPham> list = dao.findByMa(txtTimKiem.getText());
+                if (list.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm theo mã", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                } else {
                     for (SanPham sp : list) {
                         tbModel.addRow(new Object[]{sp.getMasp(), sp.getTensp(), sp.getHang(), sp.getGianhap(), sp.getGiaban(), sp.getSoluongnhap(), sp.getThoigiannhaphang(), sp.getTongchiphi(), sp.getMota()});
                     }
-                    JOptionPane.showMessageDialog(this, "Tìm kiếm thành công");
-                    return;
+                    JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    
+                }
+            } catch (Exception e) {
+            }
+        }
+
+        if (txtTimKiem.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập vào tìm kiếm và chọn combobox");
+            return;
+        }
+        if (cboTimKiem.getSelectedItem().equals("Tên")) {
+            tbModel.setRowCount(0);
+            try {
+                SanPhamDAO dao = new SanPhamDAO();
+                List<SanPham> list = dao.findByTen(txtTimKiem.getText());
+                if (list.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm theo tên", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    JOptionPane.showMessageDialog(this, "Tìm kiếm thất bại");
+                    for (SanPham sp : list) {
+                        tbModel.addRow(new Object[]{sp.getMasp(), sp.getTensp(), sp.getHang(), sp.getGianhap(), sp.getGiaban(), sp.getSoluongnhap(), sp.getThoigiannhaphang(), sp.getTongchiphi(), sp.getMota()});
+                    }
+                    JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                    
                 }
             } catch (Exception e) {
             }
@@ -554,7 +585,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         txtthoigian.setDate(null);
         txtmota.setText("");
         txttong.setText("");
-        txttimkiem.setText("");
+        txtTimKiem.setText("");
+        fill();
     }//GEN-LAST:event_btnmoiActionPerformed
 
     private void tblbangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblbangMouseClicked
@@ -583,6 +615,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnXoa;
     private javax.swing.JButton btnmoi;
+    private javax.swing.JComboBox<String> cboTimKiem;
     private javax.swing.JComboBox<String> cbohang;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -599,6 +632,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblbang;
+    private javax.swing.JTextField txtTimKiem;
     private javax.swing.JTextField txtgiaban;
     private javax.swing.JTextField txtgianhap;
     private javax.swing.JTextField txtma;
@@ -606,7 +640,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtsoluong;
     private javax.swing.JTextField txtten;
     private com.toedter.calendar.JDateChooser txtthoigian;
-    private javax.swing.JTextField txttimkiem;
     private javax.swing.JTextField txttong;
     // End of variables declaration//GEN-END:variables
 }

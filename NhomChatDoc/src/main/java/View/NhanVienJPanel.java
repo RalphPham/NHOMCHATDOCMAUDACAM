@@ -12,12 +12,15 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author admin
  */
 public class NhanVienJPanel extends javax.swing.JPanel {
+
     DefaultTableModel tableModel;
+
     /**
      * Creates new form NhanVienJPanel
      */
@@ -26,7 +29,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         initTable();
         fillTable();
     }
-    
+
     public void initTable() {
         tableModel = new DefaultTableModel();
         String[] cols = new String[]{"Mã Nhân Viên", "Tên Nhân Viên", "Email", "Số Điện Thoại", "Giới Tính", "Địa Chỉ", "Ngày Sinh"};
@@ -43,6 +46,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             tableModel.addRow(new Object[]{nv.getMaNV(), nv.getTenNV(), nv.getEmail(), nv.getSDT(), nv.getGioiTinh(), nv.getDiaChi(), nv.getNgaySinh()});
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -79,6 +83,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         btnlammoi = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblnhanvien = new javax.swing.JTable();
+        cboTimKiem = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -157,6 +162,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblnhanvien);
 
+        cboTimKiem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mã", "Tên" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -173,7 +180,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(39, 39, 39)
-                                .addComponent(txtTimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtTimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(cboTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
@@ -224,7 +233,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtTimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btntim))
+                    .addComponent(btntim)
+                    .addComponent(cboTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -456,9 +466,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Bạn có chắc muốn xóa nhân viên với mã: " + MaNV + "?",
-            "Xác nhận",
-            JOptionPane.YES_NO_OPTION);
+                "Bạn có chắc muốn xóa nhân viên với mã: " + MaNV + "?",
+                "Xác nhận",
+                JOptionPane.YES_NO_OPTION);
 
         if (confirm == JOptionPane.YES_OPTION) {
             NhanVien nv = new NhanVien();
@@ -487,6 +497,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         rdogioitinh.clearSelection();
         txtdiachi.setText("");
         txtngaysinh.setText("");
+        fillTable();
     }//GEN-LAST:event_btnlammoiActionPerformed
 
     private void tblnhanvienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblnhanvienMouseClicked
@@ -523,55 +534,97 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
     private void btntimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntimActionPerformed
         // TODO add your handling code here:
-        String maNV = txtTimkiem.getText().trim();
-
-        // Kiểm tra nếu mã nhân viên để trống
-        if (maNV.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên để tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            fillTable();
+//        String maNV = txtTimkiem.getText().trim();
+//
+//        // Kiểm tra nếu mã nhân viên để trống
+//        if (maNV.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên để tìm kiếm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            fillTable();
+//            return;
+//
+//        }
+//
+//        NhanVienDAO nvdao = new NhanVienDAO();
+//        NhanVien nv = nvdao.findByID(maNV);
+//
+//        if (nv != null) {
+//            tableModel.setRowCount(0);
+//            tableModel.addRow(new Object[]{
+//                nv.getMaNV(),
+//                nv.getTenNV(),
+//                nv.getEmail(),
+//                nv.getSDT(),
+//                nv.getGioiTinh(),
+//                nv.getDiaChi(),
+//                nv.getNgaySinh()
+//            });
+//            // Hiển thị thông tin nhân viên
+//            txtma.setText(nv.getMaNV());
+//            txtten.setText(nv.getTenNV());
+//            txtemail.setText(nv.getEmail());
+//            txtsdt.setText(nv.getSDT());
+//
+//            // Xử lý radio button giới tính
+//            if ("Nam".equals(nv.getGioiTinh())) {
+//                rdonam.setSelected(true);
+//            } else if ("Nữ".equals(nv.getGioiTinh())) {
+//                rdonu.setSelected(true);
+//            } else {
+//                rdonam.setSelected(false);
+//                rdonu.setSelected(false);
+//            }
+//
+//            txtdiachi.setText(nv.getDiaChi());
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//            txtngaysinh.setText(sdf.format(nv.getNgaySinh()));
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên theo mã");
+//            return;
+//        }
+//        // Thông báo tìm kiếm thành công
+//        JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        if (txtTimkiem.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập vào tìm kiếm và chọn combobox");
             return;
-
         }
-
-        NhanVienDAO nvdao = new NhanVienDAO();
-        NhanVien nv = nvdao.findByID(maNV);
-
-        if (nv != null) {
+        if (cboTimKiem.getSelectedItem().equals("Mã")) {
             tableModel.setRowCount(0);
-            tableModel.addRow(new Object[]{
-                nv.getMaNV(),
-                nv.getTenNV(),
-                nv.getEmail(),
-                nv.getSDT(),
-                nv.getGioiTinh(),
-                nv.getDiaChi(),
-                nv.getNgaySinh()
-            });
-            // Hiển thị thông tin nhân viên
-            txtma.setText(nv.getMaNV());
-            txtten.setText(nv.getTenNV());
-            txtemail.setText(nv.getEmail());
-            txtsdt.setText(nv.getSDT());
-
-            // Xử lý radio button giới tính
-            if ("Nam".equals(nv.getGioiTinh())) {
-                rdonam.setSelected(true);
-            } else if ("Nữ".equals(nv.getGioiTinh())) {
-                rdonu.setSelected(true);
-            } else {
-                rdonam.setSelected(false);
-                rdonu.setSelected(false);
+            try {
+                NhanVienDAO dao = new NhanVienDAO();
+                List<NhanVien> list = dao.findByMa(txtTimkiem.getText());
+                if (list.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên theo mã", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    for (NhanVien nv : list) {
+                        tableModel.addRow(new Object[]{nv.getMaNV(), nv.getTenNV(), nv.getEmail(), nv.getSDT(), nv.getGioiTinh(), nv.getDiaChi(), nv.getNgaySinh()});
+                    }
+                    JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception e) {         
             }
-
-            txtdiachi.setText(nv.getDiaChi());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            txtngaysinh.setText(sdf.format(nv.getNgaySinh()));
-        } else {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên theo mã");
+        }
+        
+        
+        if (txtTimkiem.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập vào tìm kiếm và chọn combobox");
             return;
         }
-        // Thông báo tìm kiếm thành công
-        JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        if (cboTimKiem.getSelectedItem().equals("Tên")) {
+            tableModel.setRowCount(0);
+            try {
+                NhanVienDAO dao = new NhanVienDAO();
+                List<NhanVien> list = dao.findByTen(txtTimkiem.getText());
+                if (list.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên theo tên", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    for (NhanVien nv : list) {
+                        tableModel.addRow(new Object[]{nv.getMaNV(), nv.getTenNV(), nv.getEmail(), nv.getSDT(), nv.getGioiTinh(), nv.getDiaChi(), nv.getNgaySinh()});
+                    }
+                    JOptionPane.showMessageDialog(this, "Tìm kiếm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception e) {         
+            }
+        }
     }//GEN-LAST:event_btntimActionPerformed
 
 
@@ -582,6 +635,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     private javax.swing.JButton btntim;
     private javax.swing.JButton btnxoa;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> cboTimKiem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
